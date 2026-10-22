@@ -655,7 +655,7 @@ const persist=()=>save(K_STATE,ST);
 function parse(text){
   const phases=[]; let ph=null, seen=null;
   text.split(/\r?\n/).forEach(raw=>{
-    const line=raw.trim(); if(!line) return;
+    const line=raw.trim(); if(!line || line.startsWith("//")) return;
     if(line.startsWith("# ")){
       const p=line.slice(2).split("::").map(s=>s.trim());
       const id=p[0], title=p[1]||p[0], short=p[2]||p[0].split(" ")[0];
@@ -714,8 +714,27 @@ const toggle=(ph,key,force)=>{
 };
 
 /* ---------- state ---------- */
-let CONTENT = loadRaw(K_CONTENT) || CONTENT_DEFAULT;
+let LOCAL = loadRaw(K_CONTENT);
+let CONTENT = LOCAL || CONTENT_DEFAULT;
 let PH = parse(CONTENT);
+let SOURCE = LOCAL ? "local" : "builtin";
+
+/* Pull the published list. Local edits win until you clear them, and a
+   file that will not parse leaves the previous list in place. */
+function loadPublished(){
+  if(typeof fetch!=="function") return;
+  fetch("checklist.txt",{cache:"no-cache"})
+    .then(r=> r.ok ? r.text() : Promise.reject())
+    .then(txt=>{
+      const next=parse(txt);
+      if(!next.length || !next.some(p=>p.rows.some(r=>r.t==="I"))) return;
+      PUBLISHED=txt;
+      if(SOURCE==="local") { render(); return; }
+      CONTENT=txt; PH=next; SOURCE="published"; render();
+    })
+    .catch(()=>{});
+}
+let PUBLISHED=null;
 let VIEW={name:"home"}, STEP=0, COLLAPSED={};
 const el=id=>document.getElementById(id);
 const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -791,7 +810,13 @@ function home(){
        ' critical</span><span class="meter"><i style="width:'+pct+'%"></i></span></span>'+pill+'</button>';
   });
   h+='</div>';
-  h+='<div class="hd">Workbook</div><div class="row">'+
+  h+='<div class="hd">Workbook</div>';
+  if(SOURCE==="local")
+    h+='<div class="sel unset" style="margin-bottom:8px"><p>Local edits on this device</p>'+
+       '<p class="note" style="margin:0 0 9px">This phone is using a checklist you edited here, '+
+       'not the published one.</p>'+
+       '<button class="btn" data-act="usepub">USE THE PUBLISHED LIST</button></div>';
+  h+='<div class="row">'+
      '<button class="btn" data-act="content">EDIT CHECKLIST</button>'+
      '<button class="btn btn-stop" data-act="reset-all">RESET EVERYTHING</button></div>'+
      '<p class="note">Checks are stored on this device only. Nothing syncs and nothing is shared.</p>';
@@ -887,12 +912,13 @@ function editor(){
    '<li><code>! item text</code> is a critical item</li>'+
    '<li><code>- item text @SEWER</code> is conditional on a tag</li>'+
    '<li><code>_</code> on its own line is a blank write-in line</li>'+
+   '<li><code>// note</code> is a comment and is ignored</li>'+
    '<li>Tags: SEWER, WATER, SHORE, FRESH, BATT, SETUP, HITCHUP</li>'+
    '</ul></div><textarea id="ta" spellcheck="false">'+esc(CONTENT)+'</textarea>'+
    '<div class="row" style="margin-top:10px">'+
    '<button class="btn" data-act="apply">APPLY CHANGES</button>'+
    '<button class="btn" data-act="copy">COPY ALL</button>'+
-   '<button class="btn btn-dim" data-act="revert">REVERT TO ORIGINAL</button></div>'+
+   '<button class="btn btn-dim" data-act="revert">USE PUBLISHED LIST</button></div>'+
    '<div id="msg"></div>'+
    '<p class="note">Checks are matched to item text, so reordering keeps what you have already '+
    'ticked. Renaming an item clears its tick.</p>';
@@ -990,13 +1016,19 @@ document.addEventListener("click",e=>{
     if(!next.length){ flash("msg","No phases found. Every phase needs a line starting with #.",false); return }
     const empty=next.filter(p=>!p.rows.some(r=>r.t==="I"));
     if(empty.length){ flash("msg","Phase “"+empty[0].title+"” has no items.",false); return }
-    CONTENT=txt; PH=next; save(K_CONTENT,txt);
+    CONTENT=txt; PH=next; SOURCE="local"; save(K_CONTENT,txt);
     const n=next.reduce((s,p)=>s+p.rows.filter(r=>r.t==="I").length,0);
     flash("msg","Applied. "+next.length+" phases, "+n+" items.",true); return }
 
-  if(act==="revert"){ CONTENT=CONTENT_DEFAULT; PH=parse(CONTENT);
+  if(act==="usepub"){
     try{localStorage.removeItem(K_CONTENT)}catch(err){}
-    render(); flash("msg","Reverted to the original checklist.",true); return }
+    CONTENT = PUBLISHED || CONTENT_DEFAULT; PH=parse(CONTENT);
+    SOURCE = PUBLISHED ? "published" : "builtin"; render(); return }
+
+  if(act==="revert"){ CONTENT = PUBLISHED || CONTENT_DEFAULT; PH=parse(CONTENT);
+    SOURCE = PUBLISHED ? "published" : "builtin";
+    try{localStorage.removeItem(K_CONTENT)}catch(err){}
+    render(); flash("msg","Now using the published checklist.",true); return }
 
   if(act==="copy"){ const ta=el("ta");
     (navigator.clipboard?navigator.clipboard.writeText(ta.value):Promise.reject())
@@ -1013,9 +1045,9 @@ el("mode").addEventListener("click",()=>{
   VIEW.step=!VIEW.step; STEP=0; window.scrollTo(0,0); render();
 });
 render();
+loadPublished();
 </script>
 <script>
-/* Offline: register the worker, and reload once when a new one takes over. */
 if ("serviceWorker" in navigator) {
   addEventListener("load", function(){
     navigator.serviceWorker.register("sw.js").catch(function(){});
