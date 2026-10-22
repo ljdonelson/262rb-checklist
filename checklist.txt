@@ -44,7 +44,7 @@
 
 # 1 Pre-Departure :: PRE-DEPARTURE (HOME BASE) :: PRE-DEP
 ## TRIP PLANNING AND DOCUMENTS
-- Reservation confirmed and confirmation number saved offline
+- Reservation confirmed and conf # saved offline
 - Gate code, office hours, and after-hours instructions captured
 - Site number and campground map saved to phone
 - Campground rules and quiet hours reviewed
