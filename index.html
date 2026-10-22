@@ -1,0 +1,1030 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#151f27">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>262RB Rollout</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+
+<style>
+/* The reset the artifact host supplied; needed standalone. */
+:root{color-scheme:light;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Instrument panel: sticky annunciator strip, phase cards on the home screen,
+   one-item-at-a-time step mode for work done outdoors with gloves on. */
+:root{
+  --bg:#eef1f4; --surface:#ffffff; --surface-2:#e2e7ec; --sunk:#d7dee4;
+  --fg:#16202a; --fg-dim:#5c6b78; --line:#c7d2da;
+  --accent:#0d6b76; --accent-fg:#ffffff;
+  --go:#1a7a3e; --go-bg:#d7f0e0; --go-line:#9ed4b4;
+  --warn:#8c5a00; --warn-bg:#fcecc9; --warn-line:#e2bf74;
+  --stop:#a31f27; --stop-bg:#fadadd; --stop-line:#eaa3a8;
+  --na-bg:#e4e8eb; --na-fg:#8795a0;
+  --f-ui:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --f-cond:"IBM Plex Sans Condensed","IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0c1318; --surface:#151f27; --surface-2:#1c2832; --sunk:#0a1015;
+  --fg:#e7eef3; --fg-dim:#90a3b1; --line:#2a3a46;
+  --accent:#3cb6c3; --accent-fg:#06181b;
+  --go:#4fd086; --go-bg:#0f3123; --go-line:#1f6b47;
+  --warn:#e8ab42; --warn-bg:#3a2c0f; --warn-line:#7a5c1c;
+  --stop:#f4737a; --stop-bg:#3d161a; --stop-line:#7d2f36;
+  --na-bg:#19242d; --na-fg:#6b7d8a;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0c1318; --surface:#151f27; --surface-2:#1c2832; --sunk:#0a1015;
+  --fg:#e7eef3; --fg-dim:#90a3b1; --line:#2a3a46;
+  --accent:#3cb6c3; --accent-fg:#06181b;
+  --go:#4fd086; --go-bg:#0f3123; --go-line:#1f6b47;
+  --warn:#e8ab42; --warn-bg:#3a2c0f; --warn-line:#7a5c1c;
+  --stop:#f4737a; --stop-bg:#3d161a; --stop-line:#7d2f36;
+  --na-bg:#19242d; --na-fg:#6b7d8a;
+  color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-ui);
+  font-size:16px;line-height:1.45;-webkit-text-size-adjust:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);
+  z-index:40;background:var(--surface)}
+.gut{padding-left:max(16px,env(safe-area-inset-left,0px));
+     padding-right:max(16px,env(safe-area-inset-right,0px))}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;
+  -webkit-tap-highlight-color:transparent}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.cond{font-family:var(--f-cond)}
+
+/* ---- top bar ---------------------------------------------------- */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--surface);
+  border-bottom:1px solid var(--line)}
+.bar{background:var(--surface)}
+.bar-in{display:flex;align-items:center;gap:10px;padding-block:8px;min-height:48px}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-block:7px;scrollbar-width:none;
+  border-top:1px solid var(--line)}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;display:flex;align-items:center;gap:7px;padding:0 12px;min-height:38px;
+  border-radius:999px;border:1px solid var(--line);background:var(--surface-2);
+  font-family:var(--f-cond);font-weight:700;font-size:12.5px;letter-spacing:.07em;white-space:nowrap}
+.tab[aria-current="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.tab:active{filter:brightness(.95)}
+.tab .dot{width:9px;height:9px;border-radius:50%;flex:none;background:var(--line)}
+.tab .dot.d-go{background:var(--go)}
+.tab .dot.d-warn{background:var(--warn)}
+.tab .dot.d-stop{background:var(--stop)}
+.tab[aria-current="true"] .dot{outline:1.5px solid var(--accent-fg);outline-offset:1px}
+.bar h1{font-family:var(--f-cond);font-size:17px;font-weight:700;margin:0;flex:1;min-width:0;
+  letter-spacing:.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ib{display:flex;align-items:center;justify-content:center;min-width:44px;height:40px;
+  border-radius:8px;color:var(--fg-dim);font-family:var(--f-cond);font-weight:700;font-size:13px;
+  letter-spacing:.06em;padding:0 10px;border:1px solid var(--line);background:var(--surface-2)}
+.ib:active{background:var(--sunk)}
+
+/* annunciator */
+.ann{display:flex;align-items:center;gap:10px;padding-block:8px;border-top:1px solid var(--line);
+  width:100%;text-align:left;
+  font-family:var(--f-cond);font-weight:700;letter-spacing:.07em;font-size:14px}
+.ann .lamp{width:11px;height:11px;border-radius:50%;flex:none}
+.ann .cnt{margin-left:auto;font-family:var(--f-mono);font-size:12px;letter-spacing:0;font-weight:500;opacity:.85}
+.ann-link{min-height:46px;cursor:pointer}
+.ann-link .cnt{font-family:var(--f-cond);font-size:13px;font-weight:700;letter-spacing:.08em;opacity:1}
+.ann-link:active{filter:brightness(.95)}
+.s-go{background:var(--go-bg);color:var(--go);border-color:var(--go-line)}
+.s-go .lamp{background:var(--go)}
+.s-warn{background:var(--warn-bg);color:var(--warn);border-color:var(--warn-line)}
+.s-warn .lamp{background:var(--warn)}
+.s-stop{background:var(--stop-bg);color:var(--stop);border-color:var(--stop-line)}
+.s-stop .lamp{background:var(--stop)}
+
+main{padding-block:16px 40px}
+.wrap{max-width:640px;margin:0 auto}
+
+/* ---- home ------------------------------------------------------- */
+.hd{font-family:var(--f-cond);font-size:12px;font-weight:700;letter-spacing:.12em;
+  color:var(--fg-dim);text-transform:uppercase;margin:22px 0 8px}
+.hd:first-child{margin-top:0}
+.cards{display:flex;flex-direction:column;gap:8px}
+.card{display:flex;align-items:center;gap:12px;width:100%;text-align:left;
+  background:var(--surface);border:1px solid var(--line);border-left-width:5px;
+  border-radius:var(--r);padding:13px 14px}
+.card:active{background:var(--surface-2)}
+.card .n{font-family:var(--f-mono);font-size:12px;color:var(--fg-dim);width:18px;flex:none}
+.card .t{flex:1;min-width:0}
+.card .t b{display:block;font-family:var(--f-cond);font-size:16px;font-weight:700;
+  letter-spacing:.01em;line-height:1.2}
+.card .t span{display:block;font-size:12.5px;color:var(--fg-dim);margin-top:3px}
+.card .pill{font-family:var(--f-cond);font-weight:700;font-size:11px;letter-spacing:.08em;
+  padding:4px 8px;border-radius:999px;border:1px solid;flex:none}
+.meter{height:3px;background:var(--sunk);border-radius:2px;margin-top:7px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--accent)}
+.lv-go{border-left-color:var(--go)} .lv-warn{border-left-color:var(--warn)}
+.lv-stop{border-left-color:var(--stop)} .lv-idle{border-left-color:var(--line)}
+
+.note{font-size:13px;color:var(--fg-dim);margin:10px 0 0}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.btn{font-family:var(--f-cond);font-weight:700;letter-spacing:.06em;font-size:13px;
+  padding:11px 14px;border-radius:8px;border:1px solid var(--line);background:var(--surface);
+  min-height:44px}
+.btn:active{background:var(--surface-2)}
+.btn-dim{color:var(--fg-dim)}
+.btn-stop{color:var(--stop);border-color:var(--stop-line);background:var(--stop-bg)}
+
+/* ---- selector --------------------------------------------------- */
+.sel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  padding:12px;margin-bottom:12px}
+.sel>p{margin:0 0 9px;font-family:var(--f-cond);font-size:12px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--fg-dim)}
+.sel.unset{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.sel.unset>p{color:var(--accent)}
+.opts{display:flex;flex-direction:column;gap:6px}
+.opt{text-align:left;border:1px solid var(--line);border-radius:8px;padding:11px 12px;
+  font-size:14.5px;min-height:46px;background:var(--surface-2)}
+.opt[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent);
+  font-weight:600}
+
+/* ---- list mode -------------------------------------------------- */
+.sec{margin-top:16px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+  background:var(--surface)}
+.sec-h{display:flex;align-items:center;gap:9px;width:100%;text-align:left;padding:11px 13px;
+  background:var(--surface-2);font-family:var(--f-cond);font-weight:700;font-size:13.5px;
+  letter-spacing:.07em;border-bottom:1px solid var(--line)}
+.sec-h .tw{flex:none;width:14px;color:var(--fg-dim);font-family:var(--f-mono);font-size:12px}
+.sec-h .k{margin-left:auto;font-family:var(--f-mono);font-size:11px;font-weight:500;
+  letter-spacing:0;opacity:.8}
+.sec-done .sec-h{background:var(--go-bg);color:var(--go);border-bottom-color:var(--go-line)}
+.sec-na .sec-h{background:var(--na-bg);color:var(--na-fg);font-style:italic}
+.it{display:flex;gap:11px;width:100%;text-align:left;padding:12px 13px;align-items:flex-start;
+  border-bottom:1px solid var(--line);font-size:15.5px;line-height:1.35;min-height:48px}
+.it:last-child{border-bottom:0}
+.it:active{background:var(--surface-2)}
+.bx{flex:none;width:21px;height:21px;border-radius:5px;border:2px solid var(--fg-dim);
+  margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:13px;
+  font-weight:700;line-height:1}
+.it.on .bx{background:var(--go);border-color:var(--go);color:var(--surface)}
+.it.on .tx{color:var(--fg-dim);text-decoration:line-through;text-decoration-thickness:1px}
+.it.crit .bx{border-color:var(--stop)}
+.it.crit .tx{color:var(--stop);font-weight:600}
+.it.on.crit .tx{color:var(--fg-dim);font-weight:400}
+.it.na{background:var(--na-bg);color:var(--na-fg)}
+.it.na .tx{font-style:italic;color:var(--na-fg);font-weight:400}
+.it.na .bx{border-color:var(--na-fg);border-style:dashed}
+.tx{flex:1;min-width:0}
+.it .wln{display:block;border-bottom:1px dashed var(--line);height:1.1em}
+
+/* ---- step mode -------------------------------------------------- */
+.step{display:flex;flex-direction:column;gap:14px;min-height:62vh}
+.step-top{display:flex;align-items:baseline;gap:10px}
+.step-top .eb{font-family:var(--f-cond);font-size:12px;font-weight:700;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--accent);flex:1;min-width:0}
+.step-top .ct{font-family:var(--f-mono);font-size:12px;color:var(--fg-dim)}
+.ticks{display:flex;gap:2px;height:4px}
+.ticks i{flex:1;background:var(--sunk);border-radius:1px}
+.ticks i.d{background:var(--go)}
+.ticks i.c{background:var(--stop)}
+.ticks i.p{background:var(--accent)}
+.stage{background:var(--surface);border:1px solid var(--line);border-radius:14px;
+  padding:22px 18px;display:flex;flex-direction:column;justify-content:center;flex:1;gap:14px}
+.stage.crit{border-color:var(--stop-line);background:var(--stop-bg)}
+.badge{align-self:flex-start;font-family:var(--f-cond);font-weight:700;font-size:11px;
+  letter-spacing:.12em;padding:4px 9px;border-radius:5px;background:var(--stop);color:#fff}
+.qtext{font-size:clamp(21px,5.6vw,29px);line-height:1.22;font-weight:600;margin:0;
+  text-wrap:balance;letter-spacing:-.01em}
+.stage.crit .qtext{color:var(--stop)}
+.ack{display:flex;align-items:center;gap:8px;font-family:var(--f-cond);font-weight:700;
+  letter-spacing:.09em;font-size:13px;color:var(--go)}
+.acts{display:flex;flex-direction:column;gap:8px}
+.big{width:100%;min-height:62px;border-radius:12px;font-family:var(--f-cond);font-weight:700;
+  font-size:19px;letter-spacing:.1em;border:1px solid}
+.big-go{background:var(--go);color:#fff;border-color:var(--go)}
+.big-go:active{filter:brightness(.92)}
+.big-un{background:var(--surface);color:var(--fg-dim);border-color:var(--line)}
+.sub{display:flex;gap:8px}
+.sub .btn{flex:1;justify-content:center;text-align:center}
+
+.end{text-align:center;padding:26px 16px;border-radius:14px;border:1px solid}
+.end h2{font-family:var(--f-cond);font-size:27px;letter-spacing:.07em;margin:0 0 6px}
+.end p{margin:0 0 16px;font-size:14.5px}
+
+/* ---- content editor --------------------------------------------- */
+textarea{width:100%;min-height:58vh;background:var(--sunk);color:var(--fg);
+  border:1px solid var(--line);border-radius:var(--r);padding:12px;
+  font-family:var(--f-mono);font-size:13px;line-height:1.55;resize:vertical}
+.msg{margin-top:10px;padding:11px 12px;border-radius:8px;font-size:14px;border:1px solid}
+.msg-ok{background:var(--go-bg);color:var(--go);border-color:var(--go-line)}
+.msg-err{background:var(--stop-bg);color:var(--stop);border-color:var(--stop-line)}
+.syn{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  padding:12px 14px;margin-bottom:12px;font-size:13.5px}
+.syn code{font-family:var(--f-mono);font-size:12.5px;background:var(--sunk);
+  padding:1px 5px;border-radius:4px}
+.syn ul{margin:8px 0 0;padding-left:18px} .syn li{margin:4px 0}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="bar"><div class="bar-in gut">
+    <button class="ib" id="back" hidden>HOME</button>
+    <h1 id="ttl">262RB Rollout</h1>
+    <button class="ib" id="mode" hidden>LIST</button>
+  </div></div>
+  <div id="annwrap"></div>
+  <div class="tabs gut" id="tabs" hidden></div>
+</div>
+<main><div class="wrap gut" id="view"></div></main>
+
+<script>
+const CONTENT_DEFAULT = `
+# 1 Pre-Departure :: PRE-DEPARTURE (HOME BASE) :: PRE-DEP
+## TRIP PLANNING AND DOCUMENTS
+- Reservation confirmed and confirmation number saved offline
+- Gate code, office hours, and after-hours instructions captured
+- Site number and campground map saved to phone
+- Campground rules and quiet hours reviewed
+- Route checked for bridge height, weight limits, and steep grades
+- Weather and wind forecast reviewed for travel day and the stay
+- Fuel stops identified with pull-through or truck lane access
+- Route and ETA shared with a family contact
+- Mail hold, package deliveries, and pet care arranged
+- Route grade and water availability at the destination evaluated
+- Fresh tank fill level decided for the route
+- Insurance card and registration on board
+- Roadside assistance number saved offline
+- Spare keys on board
+- Payment method on board
+## SYSTEMS, SAFETY, AND RUNNING GEAR
+- Battery state of charge verified and adequate for the drive
+- Solar controller reading normal with no fault codes
+- Refrigerator powered and down to temperature before loading
+- Shore power or generator confirmed working as needed
+- Smoke, LP, and CO detectors tested
+- Fire extinguisher present with the gauge in the green
+- Fresh, gray, and black tank levels noted before departure
+- Fresh tank filled to the level decided above
+- Trailer tires inspected for wear, cracking, and damage
+- Trailer tires set to cold pressure spec
+- Trailer spare tire pressure checked and spare accessible
+- Lug nuts torque-checked
+- Wheel wells and brakes clear of debris
+- Exterior lights, seals, and sidewalls inspected for damage
+## TOW VEHICLE
+- Fuel tank full
+- Engine oil and coolant checked
+- Washer fluid topped off
+- Tow vehicle tires inspected and set to towing pressure
+- Tow vehicle spare tire checked and accessible
+- Backup and side cameras clean
+- Truck bed cargo secured or covered
+## PROVISIONING AND LOADING
+- Groceries and cooler loaded
+- Drinking water loaded
+- Medications and first aid kit checked and restocked
+- Black tank treatment on board
+- RV-safe toilet paper on board
+- Grill fuel on board
+- Firewood and lighter as needed
+- Chairs and outdoor mat loaded
+- Outdoor table and site lighting loaded
+- Walkie talkies charged and packed in the tow vehicle
+- Tool kit and work gloves on board
+- Disposable gloves on board
+- Duct tape, zip ties, and spare fuses on board
+- Sewer hose on board
+- Potable water hose on board
+- Pressure regulator and filter on board
+- Surge protector on board
+- Leveling blocks on board
+- Wheel chocks on board
+- X-chocks on board
+- Jack pads on board
+- Slide-box exterior storage loaded and contents secured
+- Refrigerator loaded tightly and shelves stable
+- Bed and dinette cleared
+- Bath items stowed
+- Loose items put away in their travel places
+- Non-camp side slide floor clear of obstructions
+- Cargo distributed low and forward of the axles
+- Nothing loose in the pass-through or storage compartments
+## HOUSE
+- Pets loaded or delivered to the sitter
+- Thermostat set and house doors locked
+
+# 2 Travel Day :: TRAVEL DAY :: TRAVEL
+## GOAL - GET OUT AND LOOK BEFORE MOVING
+! Stopped with the parking brake set and both people out
+! Walkie talkies on, tested, and on the same channel
+! Path walked end to end on foot
+! Overhead clearance checked for branches, wires, and eaves
+! Ground checked for softness, holes, and stumps
+! Obstacles noted: posts, pedestals, spigots, and meters
+! Clearance confirmed on both sides at the widest point
+! Turn and swing path clear
+! Hand signals and a stop word agreed before moving
+! Weight distribution bar tension released, bars removed and stowed
+## FUEL AND REST STOPS
+- Pull-through or exit path confirmed before committing to the lot
+- Hub and tire temperatures checked by hand at the first stop and each fuel stop
+- Tire pressures spot-checked and TPMS alarms reviewed
+- Refrigerator still running and interior temperature acceptable
+- Battery state of charge and solar input checked
+- Quick look under the trailer for drips or hanging items
+- Water and shade for pets
+## OVERNIGHT STOP WITHOUT FULL SETUP
+- Parked level enough for the refrigerator and for sleeping
+- Chocks placed if unhitching
+- Jacks down only if needed
+- Doors locked and valuables out of sight
+
+# 3 Arrival Setup :: CAMPGROUND ARRIVAL AND SETUP :: ARRIVE
+?SITE
+## CHECK IN
+- Reservation, site number, and length of stay confirmed
+- Available discounts asked about
+- Map, rules, quiet hours, and gate code collected
+- WiFi password collected
+- Dump station, trash, water fill, and restroom locations noted
+- Map and posted rules photographed
+## GOAL - GET OUT AND LOOK BEFORE MOVING
+! Stopped with the parking brake set and both people out
+! Walkie talkies on, tested, and on the same channel
+! Path walked end to end on foot
+! Overhead clearance checked for branches, wires, and eaves
+! Ground checked for softness, holes, and stumps
+! Obstacles noted: posts, pedestals, spigots, and meters
+! Clearance confirmed on both sides at the widest point
+! Turn and swing path clear
+! Hand signals and a stop word agreed before moving
+! Weight distribution bar tension released, bars removed and stowed
+## SCOUT THE SITE BEFORE COMMITTING
+! Non-camp side (driver side) slide clearance verified
+! Driver side clearance to the road, neighboring site, and pedestal confirmed
+! Awning clearance on the camp side verified
+! Ground firmness and slope direction assessed
+! Overhead branches over the walk-on roof evaluated
+! Pedestal tested with the surge protector before unhitching @SHORE
+! Water spigot tested for pressure and appearance @WATER
+- Utility pedestal position matched to the connection points on the trailer
+- Fire ring, picnic table, and neighbor spacing considered
+- Different site requested if any of the above fails
+## POSITION, LEVEL, AND UNHITCH
+- Spotter in place with walkie talkie, backing in slowly
+- Side to side level checked
+- Blocks placed under both tires on the low side at the same time
+- Pulled onto blocks and level rechecked
+! Wheel chocks placed front and rear on both sides
+- X-chocks installed between the tandem tires on both sides
+! Tow vehicle in park with the parking brake set
+- Tongue jack lowered to take the weight off the ball
+- 7-pin disconnected
+- Breakaway cable disconnected
+- Safety chains disconnected
+- Coupler latch released and coupler raised clear of the ball
+- Tow vehicle pulled forward and parked
+- Front to rear level set with the tongue jack
+- Stabilizer jacks lowered to firm contact without lifting the frame
+## POWER
+! Pedestal breaker off before connecting anything @SHORE
+- Surge protector installed at the pedestal @SHORE
+- 50A cord connected at both ends and locked @SHORE
+- Pedestal breaker on and voltage confirmed in range @SHORE
+- Both air conditioners confirmed on separate legs @SHORE
+- Converter charging the battery bank @SHORE
+- Solar array unshaded and controller producing @BATT
+- Battery state of charge logged as the arrival baseline @BATT
+- Inverter energized and load plan set for the stay @BATT
+## WATER
+! Spigot purged before connecting anything @WATER
+- Pressure regulator installed at the spigot @WATER
+- Filter installed downstream of the regulator @WATER
+- Potable hose connected at the filter @WATER
+! Hose and filter purged of air and debris before connecting to the trailer @WATER
+- Potable hose connected to the trailer inlet @WATER
+- Spigot opened and all connections checked for leaks @WATER
+- Fresh tank filled to the planned level @FRESH
+- Water pump on and system pressurized @FRESH
+- Water heater confirmed full and turned on
+- Faucets, shower, and toilet checked for flow
+## SEWER
+- Disposable safety gloves on @SEWER
+! Sewer hose connected with a tight seal at both ends @SEWER
+- Hose supported with continuous fall to the inlet @SEWER
+! Black valve confirmed closed @SEWER
+- Gray valve position decided and set @SEWER
+- Black tank treatment added @SEWER
+- Gloves removed and hands washed @SEWER
+## DEPLOY AND SETTLE
+- Non-camp side slide extended after a final clearance check
+- Awning extended with a wind plan in mind
+- Steps lowered and footing verified
+- Roof vent cover opened
+- Mat, chairs, table, and grill set out
+- Refrigerator confirmed cold and running on the current power source
+- Smoke, LP, and CO detectors verified operating
+- Tank levels logged as the arrival baseline
+- Exterior and site lighting set
+- Valuables and gear secured for overnight
+- All exterior compartments closed and locked
+
+# 4 Camp Departure :: CAMPGROUND DEPARTURE :: DEPART
+?SITE
+## GOAL - GET OUT AND LOOK BEFORE MOVING
+! Stopped with the parking brake set and both people out
+! Walkie talkies on, tested, and on the same channel
+! Path walked end to end on foot
+! Overhead clearance checked for branches, wires, and eaves
+! Ground checked for softness, holes, and stumps
+! Obstacles noted: posts, pedestals, spigots, and meters
+! Clearance confirmed on both sides at the widest point
+! Turn and swing path clear
+! Hand signals and a stop word agreed before moving
+! Weight distribution bar tension released, bars removed and stowed
+## INTERIOR PREP
+- Refrigerator packed tight for travel
+- Countertops, table, and floors cleared and wiped
+- Loose items put away in their travel places
+- Bath items stowed
+## TANKS
+- Disposable safety gloves on @SEWER
+- Black tank dumped first @SEWER
+- Black tank flushed until the discharge runs clear @SEWER
+- Gray tank dumped last to rinse the hose @SEWER
+- Valves closed and caps replaced @SEWER
+- Sewer hose rinsed and drained @SEWER
+- Gloves removed and hands washed @SEWER
+- Tank treatment added for travel @SEWER
+- Tanks dumped at the campground dump station on the way out @FRESH
+- Fresh water level set appropriately for the drive home
+## WATER DISCONNECT
+- Spigot closed @WATER
+- Hose disconnected and drained @WATER
+- Regulator and filter removed @WATER
+## POWER DISCONNECT
+- Air conditioners and high draw loads off before disconnecting @SHORE
+! Pedestal breaker off @SHORE
+- Cord unplugged and surge protector removed from the pedestal @SHORE
+- Battery state of charge confirmed adequate for travel @BATT
+- Solar controller confirmed producing @BATT
+## BREAK CAMP
+- Awning dried if wet
+- Mat, chairs, table, grill, and site lighting collected
+- Non-camp side slide retracted after a clearance check
+## LEAVE THE SITE BETTER
+! Fire fully extinguished and cold to the touch
+- Site walked for stakes, tools, trash, and gear
+- Trash carried out to the campground receptacle
+- Site left cleaner than it was found
+- Host and neighbors acknowledged on the way out
+
+# 5 Homebase Return :: HOMEBASE RETURN :: HOME
+## GOAL - GET OUT AND LOOK BEFORE MOVING
+! Stopped with the parking brake set and both people out
+! Walkie talkies on, tested, and on the same channel
+! Path walked end to end on foot
+! Overhead clearance checked for branches, wires, and eaves
+! Ground checked for softness, holes, and stumps
+! Obstacles noted: posts, pedestals, spigots, and meters
+! Clearance confirmed on both sides at the widest point
+! Turn and swing path clear
+! Hand signals and a stop word agreed before moving
+! Weight distribution bar tension released, bars removed and stowed
+## PARK AND SECURE
+- Trailer positioned in its storage spot
+- Wheel chocks placed front and rear
+- X-chocks installed between the tandem tires
+- Leveled enough for the refrigerator and for drainage
+- Unhitched with the tongue jack on a pad
+- Weight distribution bars stowed
+- Stabilizer jacks set
+## TANKS AND PLUMBING
+- Black and gray tanks dumped and flushed if not already done
+- Sewer hose rinsed, sanitized, and stowed
+- Fresh tank drained or left per the storage plan
+- Water heater drained if storing more than a few weeks
+- Low point drains opened and closed as planned
+- Water pump off and system depressurized
+- Toilet bowl left dry or with a small amount of treatment
+## INTERIOR
+- Refrigerator emptied, wiped, defrosted, and propped open
+- All food and perishables removed
+- Trash removed
+- Linens and towels removed for laundry
+- Floors vacuumed and surfaces wiped
+- Bathroom cleaned and dried
+- Windows and vents opened briefly to air the unit out
+- Cabinets left slightly open to prevent musty odors
+- Pest deterrents placed and entry points checked
+## ELECTRICAL
+- Battery state of charge checked and recorded
+- Battery brought to the storage state of charge for LiFePO4
+- Solar controller set for storage
+- Inverter off
+- Shore power connected or disconnected per the storage plan
+- All 12V loads confirmed off
+## EXTERIOR
+- Exterior washed if road grime or bugs are heavy
+- Awning fully dry before final retraction
+- Wet gear removed from compartments and dried
+- Hoses, cord, and outdoor gear returned to assigned compartments
+- All exterior compartments closed and locked
+- Roof and seals given a visual check
+- Tires inspected and pressure set for storage
+- Cover installed if used
+- Trailer locked and hitch lock installed
+## RESTOCK AND CLOSE OUT
+- Consumables restocked for the next trip
+- Tank chemicals, toilet paper, and paper goods replenished
+- Gear returned to its assigned compartment
+- Trip mileage and nights logged
+## FOUND ON THIS TRIP (WRITE IT DOWN BEFORE YOU FORGET)
+_
+_
+_
+_
+
+# R Rollout Check :: ROLLOUT CHECK - RUN BEFORE THE WHEELS TURN :: ROLLOUT
+?STOP
+## GROUND LEVEL
+! Wheel chocks pulled and stowed
+! X-chocks removed from between the tandem tires and stowed
+! Leveling blocks collected and stowed @SETUP
+! Jack pads collected and stowed @SETUP
+! Stabilizer jacks fully retracted @SETUP
+! Tongue jack fully raised
+! Tongue jack foot stowed
+! Nothing under the trailer: cords, hoses, tools, trash
+! Ground checked for fresh drips
+## INSIDE
+! Countertops and table clear
+! Floor clear of loose items
+! Cabinets and drawers latched
+! Pantry door latched
+! Refrigerator door latched
+! Refrigerator confirmed running for travel
+! Shower door secured
+- Bath items stowed
+- Toilet lid closed
+! TV secured
+! Antenna lowered
+! Water pump off
+! Water heater off
+! Water heater bypass valves confirmed in the correct position @SETUP
+! Inverter off
+! Fireplace off
+! Propane off at the tanks
+! Tank heaters off
+- Interior lights off
+! Roof vents closed
+! Roof vent cover closed and latched
+! Fan hatches closed and secured
+! All windows closed and latched
+## ON THE RIG
+! Power cord stowed and compartment latched @SETUP
+! Water hoses stowed and compartment latched @SETUP
+- Pressure regulator and filter stowed @SETUP
+- City water inlet capped @SETUP
+! Sewer hose stowed and compartment latched @SETUP
+- Surge protector stowed @SETUP
+! Outdoor gear stowed: chairs, mat, table, grill, lighting @SETUP
+! Awning fully retracted @SETUP
+! Awning travel lock engaged @SETUP
+! Non-camp side slide fully retracted and seal seated
+! Slide-box exterior storage doors latched
+! All bay hatches and compartment doors latched and locked
+! Screen door secured
+! Entry door closed, latched, and locked
+! MorRyde steps fully stowed
+! Step pin engaged
+! Roof clear of branches, tools, and debris
+## HITCH AND LIGHTS
+! Tow vehicle backed to the coupler with a spotter on the walkie talkie @HITCHUP
+! Coupler seated fully on the ball and latch closed
+! Coupler safety pin installed
+! Weight distribution bars installed and tensioned
+- Sway control connected if separate from the bars @HITCHUP
+! Safety chains crossed under the tongue and hooked to the truck
+! Breakaway cable attached to the truck frame, not the ball mount or chains
+! 7-pin connector seated and cable routed with slack, off the ground
+! Running and marker lights verified
+! Brake and turn signals verified
+- Trailer sitting level front to rear at the hitch @HITCHUP
+! Trailer tire pressures and TPMS reading
+! Mirrors extended and adjusted
+! Brake controller powered and gain set
+! Departure area walked and clear of blocks, cords, and tools
+! Full lap of the rig with fresh eyes
+`;
+
+const SELECTORS = {
+  SITE:{label:"Site type",prompt:"Select site type",opts:[
+    ["FULL HOOKUP (POWER, WATER, SEWER)",["FRESH","BATT"]],
+    ["WATER AND ELECTRIC",["SEWER","FRESH","BATT"]],
+    ["ELECTRIC ONLY",["SEWER","WATER","BATT"]],
+    ["DRY CAMPING",["SEWER","WATER","SHORE"]]]},
+  STOP:{label:"Stop type",prompt:"Select stop type",opts:[
+    ["FULL DEPARTURE (HITCHING UP)",[]],
+    ["QUICK STOP (STAYED HITCHED)",["SETUP","HITCHUP"]]]}
+};
+const LINK_TO_ROLLOUT = ["1","2","4"];
+const ROLLOUT_ID = "R";
+const K_STATE="rb262.state.v1", K_CONTENT="rb262.content.v1";
+
+/* ---------- storage ---------- */
+function load(k,f){try{const v=localStorage.getItem(k);return v?JSON.parse(v):f}catch(e){return f}}
+function loadRaw(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function save(k,v){try{localStorage.setItem(k,typeof v==="string"?v:JSON.stringify(v))}catch(e){}}
+let ST = load(K_STATE,{checks:{},sel:{}});
+if(!ST.checks)ST.checks={}; if(!ST.sel)ST.sel={};
+const persist=()=>save(K_STATE,ST);
+
+/* ---------- parse ---------- */
+function parse(text){
+  const phases=[]; let ph=null, seen=null;
+  text.split(/\r?\n/).forEach(raw=>{
+    const line=raw.trim(); if(!line) return;
+    if(line.startsWith("# ")){
+      const p=line.slice(2).split("::").map(s=>s.trim());
+      const id=p[0], title=p[1]||p[0], short=p[2]||p[0].split(" ")[0];
+      ph={id:id.split(" ")[0],name:id,title:title,short:short,sel:null,rows:[]};
+      seen=new Set(); phases.push(ph); return;
+    }
+    if(!ph) return;
+    if(line.startsWith("?")){ const s=line.slice(1).trim().toUpperCase();
+      if(SELECTORS[s]) ph.sel=s; return; }
+    if(line.startsWith("## ")){ ph.rows.push({t:"S",x:line.slice(3).trim()}); return; }
+    if(line==="_"){ ph.rows.push({t:"N"}); return; }
+    const m=line.match(/^([-!])\s+(.*)$/); if(!m) return;
+    let x=m[2].trim(), g="";
+    const tag=x.match(/\s@([A-Z]+)\s*$/); if(tag){g=tag[1];x=x.slice(0,tag.index).trim()}
+    if(!x) return;
+    let key=x; let n=2; while(seen.has(key)){key=x+"~"+n;n++} seen.add(key);
+    ph.rows.push({t:"I",x,c:m[1]==="!",g,key});
+  });
+  return phases.filter(p=>p.rows.length);
+}
+function suppressed(ph){
+  if(!ph.sel) return [];
+  const v=ST.sel[ph.id]; if(!v) return [];
+  const hit=SELECTORS[ph.sel].opts.find(o=>o[0]===v);
+  return hit?hit[1]:[];
+}
+const applies=(row,sup)=> !row.g || sup.indexOf(row.g)<0;
+
+function stats(ph){
+  const sup=suppressed(ph); let tot=0,done=0,crit=0,critDone=0;
+  ph.rows.forEach(r=>{ if(r.t!=="I"||!applies(r,sup))return;
+    tot++; const on=!!(ST.checks[ph.id]||{})[r.key];
+    if(on)done++; if(r.c){crit++; if(on)critDone++} });
+  const open=tot-done, critOpen=crit-critDone;
+  return {tot,done,open,crit,critOpen,
+    level: open===0 ? "go" : (critOpen>0 ? "stop" : "warn")};
+}
+function secState(ph,i,sup){
+  let tot=0,done=0;
+  for(let j=i+1;j<ph.rows.length && ph.rows[j].t!=="S";j++){
+    const r=ph.rows[j]; if(r.t!=="I")continue;
+    if(!applies(r,sup))continue; tot++;
+    if((ST.checks[ph.id]||{})[r.key])done++;
+  }
+  let any=false;
+  for(let j=i+1;j<ph.rows.length && ph.rows[j].t!=="S";j++) if(ph.rows[j].t==="I")any=true;
+  if(!any) return "plain";
+  if(tot===0) return "na";
+  return done===tot ? "done" : "open";
+}
+const toggle=(ph,key,force)=>{
+  const c=ST.checks[ph.id]||(ST.checks[ph.id]={});
+  const nv = force===undefined ? !c[key] : force;
+  if(nv)c[key]=1; else delete c[key];
+  persist(); return nv;
+};
+
+/* ---------- state ---------- */
+let CONTENT = loadRaw(K_CONTENT) || CONTENT_DEFAULT;
+let PH = parse(CONTENT);
+let VIEW={name:"home"}, STEP=0, COLLAPSED={};
+const el=id=>document.getElementById(id);
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const byId=id=>PH.find(p=>p.id===id);
+
+/* ---------- wake lock ---------- */
+let WL=null;
+async function wake(on){
+  try{
+    if(on && !WL && navigator.wakeLock){WL=await navigator.wakeLock.request("screen");
+      WL.addEventListener("release",()=>{WL=null})}
+    if(!on && WL){await WL.release();WL=null}
+  }catch(e){WL=null}
+}
+document.addEventListener("visibilitychange",()=>{
+  if(document.visibilityState==="visible" && VIEW.name==="phase") wake(true);
+});
+
+/* ---------- render ---------- */
+function annunciator(s,ph){
+  const cls = s.level==="go"?"s-go":s.level==="stop"?"s-stop":"s-warn";
+  const link = s.level==="go" && ph && LINK_TO_ROLLOUT.indexOf(ph.id)>=0 && byId(ROLLOUT_ID);
+  let txt;
+  if(s.level==="stop") txt = s.critOpen+" CRITICAL OPEN";
+  else if(s.level==="warn") txt = s.open+" REMAINING";
+  else txt = link ? "PHASE COMPLETE" : "ALL CLEAR";
+  const right = link ? "GO TO ROLLOUT \u203A" : s.done+"/"+s.tot;
+  const body = '<span class="lamp"></span><span>'+txt+'</span><span class="cnt">'+right+'</span>';
+  return link
+    ? '<button class="ann gut '+cls+' ann-link" data-go="'+ROLLOUT_ID+'">'+body+'</button>'
+    : '<div class="ann gut '+cls+'">'+body+'</div>';
+}
+function tabStrip(){
+  return PH.map(p=>{
+    const s=stats(p), on = VIEW.name==="phase" && VIEW.id===p.id;
+    const d = s.done===0 ? "" : " d-"+(s.level==="go"?"go":s.level==="stop"?"stop":"warn");
+    return '<button class="tab" data-go="'+p.id+'" aria-current="'+on+'">'+
+      '<span class="dot'+d+'"></span>'+esc(p.short)+'</button>';
+  }).join("");
+}
+function render(){
+  const back=el("back"), mode=el("mode");
+  back.hidden = VIEW.name==="home";
+  mode.hidden = VIEW.name!=="phase";
+  if(VIEW.name==="phase"){ mode.textContent = VIEW.step?"LIST":"STEP"; }
+  el("ttl").textContent =
+    VIEW.name==="home" ? "262RB Rollout" :
+    VIEW.name==="content" ? "Checklist content" : byId(VIEW.id).title;
+  el("annwrap").innerHTML = VIEW.name==="phase" ? annunciator(stats(byId(VIEW.id)),byId(VIEW.id)) : "";
+  const v=el("view");
+  if(VIEW.name==="home") v.innerHTML=home();
+  else if(VIEW.name==="content") v.innerHTML=editor();
+  else v.innerHTML = VIEW.step ? stepView(byId(VIEW.id)) : listView(byId(VIEW.id));
+  const tabs=el("tabs");
+  tabs.hidden = VIEW.name==="content";
+  if(!tabs.hidden){
+    tabs.innerHTML = tabStrip();
+    const cur=tabs.querySelector('[aria-current="true"]');
+    if(cur) cur.scrollIntoView({block:"nearest",inline:"center"});
+  }
+  wake(VIEW.name==="phase");
+}
+function home(){
+  let h='<div class="hd">Phases</div><div class="cards">';
+  PH.forEach(p=>{
+    const s=stats(p), pct=s.tot?Math.round(100*s.done/s.tot):0;
+    const started=s.done>0, lv=started?s.level:"idle";
+    const pill = !started ? '' :
+      '<span class="pill s-'+(s.level==="go"?"go":s.level==="stop"?"stop":"warn")+'">'+
+      (s.level==="go"?"CLEAR":s.level==="stop"?"NO GO":s.open+" LEFT")+'</span>';
+    h+='<button class="card lv-'+lv+'" data-go="'+p.id+'"><span class="n mono">'+esc(p.id)+
+       '</span><span class="t"><b>'+esc(p.title)+'</b><span>'+s.tot+' items · '+s.crit+
+       ' critical</span><span class="meter"><i style="width:'+pct+'%"></i></span></span>'+pill+'</button>';
+  });
+  h+='</div>';
+  h+='<div class="hd">Workbook</div><div class="row">'+
+     '<button class="btn" data-act="content">EDIT CHECKLIST</button>'+
+     '<button class="btn btn-stop" data-act="reset-all">RESET EVERYTHING</button></div>'+
+     '<p class="note">Checks are stored on this device only. Nothing syncs and nothing is shared.</p>';
+  return h;
+}
+function selector(ph){
+  if(!ph.sel) return "";
+  const S=SELECTORS[ph.sel], cur=ST.sel[ph.id]||"";
+  let h='<div class="sel'+(cur?"":" unset")+'"><p>'+(cur?S.label:S.prompt)+'</p><div class="opts">';
+  S.opts.forEach(o=>{ h+='<button class="opt" data-sel="'+esc(o[0])+'" aria-pressed="'+
+    (cur===o[0])+'">'+esc(o[0])+'</button>' });
+  h+='</div></div>';
+  return h;
+}
+function listView(ph){
+  const sup=suppressed(ph), ck=ST.checks[ph.id]||{};
+  let h=selector(ph);
+  h+='<div class="row"><button class="btn btn-dim" data-act="reset">RESET THIS PHASE</button></div>';
+  let open=false;
+  ph.rows.forEach((r,i)=>{
+    if(r.t==="S"){
+      if(open)h+='</div></section>';
+      const st=secState(ph,i,sup), key=ph.id+"|"+i, col=COLLAPSED[key];
+      h+='<section class="sec sec-'+st+'"><button class="sec-h" data-col="'+key+'">'+
+         '<span class="tw">'+(col?"+":"−")+'</span><span>'+esc(r.x)+'</span>'+
+         '<span class="k">'+(st==="na"?"N/A":st==="done"?"DONE":"")+'</span>'+
+         '</button><div'+(col?" hidden":"")+'>';
+      open=true; return;
+    }
+    if(!open){h+='<section class="sec"><div>';open=true}
+    if(r.t==="N"){ h+='<div class="it"><span class="bx"></span><span class="tx"><span class="wln"></span></span></div>'; return }
+    const na=!applies(r,sup), on=!!ck[r.key];
+    h+='<button class="it'+(on?" on":"")+(r.c?" crit":"")+(na?" na":"")+'" data-tog="'+esc(r.key)+
+       '"><span class="bx">'+(on?"✓":"")+'</span><span class="tx">'+esc(r.x)+'</span></button>';
+  });
+  if(open)h+='</div></section>';
+  return h;
+}
+function activeRows(ph){
+  const sup=suppressed(ph), out=[];
+  ph.rows.forEach((r,i)=>{ if(r.t!=="I"||!applies(r,sup))return;
+    let sec=""; for(let j=i;j>=0;j--) if(ph.rows[j].t==="S"){sec=ph.rows[j].x;break}
+    out.push({r,sec}) });
+  return out;
+}
+function stepView(ph){
+  const rows=activeRows(ph), ck=ST.checks[ph.id]||{};
+  let h=selector(ph);
+  if(!rows.length) return h+'<p class="note">No applicable items for this selection.</p>';
+  if(STEP>=rows.length) return h+endCard(ph,rows);
+  const cur=rows[STEP], on=!!ck[cur.r.key];
+  h+='<div class="step"><div class="step-top"><span class="eb">'+esc(cur.sec)+
+     '</span><span class="ct">'+(STEP+1)+" / "+rows.length+'</span></div><div class="ticks">';
+  rows.forEach((o,i)=>{ const d=!!ck[o.r.key];
+    h+='<i class="'+(i===STEP?"p":d?"d":o.r.c?"c":"")+'"></i>' });
+  h+='</div><div class="stage'+(cur.r.c&&!on?" crit":"")+'">'+
+     (cur.r.c?'<span class="badge">CRITICAL</span>':"")+
+     '<p class="qtext">'+esc(cur.r.x)+'</p>'+
+     (on?'<span class="ack">✓ CHECKED</span>':"")+'</div>'+
+     '<div class="acts">'+
+     (on?'<button class="big big-un" data-step="uncheck">UNCHECK</button>'
+        :'<button class="big big-go" data-step="check">CHECK</button>')+
+     '<div class="sub"><button class="btn" data-step="prev"'+(STEP?"":" disabled")+'>PREVIOUS</button>'+
+     '<button class="btn" data-step="next">SKIP</button></div></div></div>';
+  return h;
+}
+function endCard(ph,rows){
+  const s=stats(ph);
+  const cls=s.level==="go"?"s-go":s.level==="stop"?"s-stop":"s-warn";
+  const head=s.level==="go"?"ALL CLEAR":s.level==="stop"?"NO GO":"ITEMS REMAIN";
+  let msg;
+  if(s.level==="go") msg = LINK_TO_ROLLOUT.indexOf(ph.id)>=0
+    ? "This phase is complete. Nothing moves until Rollout Check is clear."
+    : "Every applicable item on this phase is checked.";
+  else if(s.level==="stop") msg = s.critOpen+" critical item"+(s.critOpen>1?"s":"")+
+    " still open, "+s.open+" total remaining.";
+  else msg = s.open+" item"+(s.open>1?"s":"")+" still open. None of them are critical.";
+  let h='<div class="end '+cls+'"><h2>'+head+'</h2><p>'+msg+'</p>';
+  if(s.open>0) h+='<button class="btn" data-step="firstopen">GO TO FIRST OPEN ITEM</button>';
+  else if(LINK_TO_ROLLOUT.indexOf(ph.id)>=0)
+    h+='<button class="btn" data-go="'+ROLLOUT_ID+'">OPEN ROLLOUT CHECK</button>';
+  h+='</div><div class="row" style="margin-top:12px">'+
+     '<button class="btn" data-step="restart">BACK TO START</button>'+
+     '<button class="btn btn-dim" data-act="reset">RESET THIS PHASE</button></div>';
+  return h;
+}
+function editor(){
+  return '<div class="syn"><b>Format</b><ul>'+
+   '<li><code># 7 New Phase :: NEW PHASE :: NEW</code> starts a phase. The third '+
+   'part is the short name on the phase strip.</li>'+
+   '<li><code>## SECTION NAME</code> starts a section</li>'+
+   '<li><code>- item text</code> is a normal item</li>'+
+   '<li><code>! item text</code> is a critical item</li>'+
+   '<li><code>- item text @SEWER</code> is conditional on a tag</li>'+
+   '<li><code>_</code> on its own line is a blank write-in line</li>'+
+   '<li>Tags: SEWER, WATER, SHORE, FRESH, BATT, SETUP, HITCHUP</li>'+
+   '</ul></div><textarea id="ta" spellcheck="false">'+esc(CONTENT)+'</textarea>'+
+   '<div class="row" style="margin-top:10px">'+
+   '<button class="btn" data-act="apply">APPLY CHANGES</button>'+
+   '<button class="btn" data-act="copy">COPY ALL</button>'+
+   '<button class="btn btn-dim" data-act="revert">REVERT TO ORIGINAL</button></div>'+
+   '<div id="msg"></div>'+
+   '<p class="note">Checks are matched to item text, so reordering keeps what you have already '+
+   'ticked. Renaming an item clears its tick.</p>';
+}
+
+/* ---------- actions ---------- */
+function go(view){VIEW=view;STEP=0;window.scrollTo(0,0);render()}
+function advance(ph){
+  const rows=activeRows(ph), ck=ST.checks[ph.id]||{};
+  let i=STEP+1; while(i<rows.length && ck[rows[i].r.key]) i++;
+  STEP=i;
+}
+function refreshSection(btn){
+  const sec=btn.closest(".sec"); if(!sec) return;
+  const items=Array.prototype.slice.call(sec.querySelectorAll(".it[data-tog]"));
+  if(!items.length) return;
+  const live=items.filter(i=>!i.classList.contains("na"));
+  const st = !live.length ? "na"
+    : live.every(i=>i.classList.contains("on")) ? "done" : "open";
+  sec.classList.remove("sec-done","sec-na","sec-open","sec-plain");
+  sec.classList.add("sec-"+st);
+  const k=sec.querySelector(".sec-h .k");
+  if(k) k.textContent = st==="na" ? "N/A" : st==="done" ? "DONE" : "";
+}
+function refreshChrome(ph){
+  const a=el("annwrap"); if(a) a.innerHTML=annunciator(stats(ph),ph);
+  const tabs=el("tabs"); if(!tabs || tabs.hidden) return;
+  PH.forEach(p=>{
+    const s=stats(p), dot=tabs.querySelector('[data-go="'+p.id+'"] .dot');
+    if(dot) dot.className = "dot" + (s.done===0 ? ""
+      : " d-"+(s.level==="go"?"go":s.level==="stop"?"stop":"warn"));
+  });
+}
+let pendingReset=null;
+function flash(id,text,ok){
+  const m=el(id); if(!m)return;
+  m.className="msg "+(ok?"msg-ok":"msg-err"); m.textContent=text;
+}
+
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-go],[data-act],[data-tog],[data-sel],[data-step],[data-col]");
+  if(!t) return;
+
+  if(t.dataset.go){
+    const id=t.dataset.go;
+    if(VIEW.name==="phase" && VIEW.id===id){ STEP=0; window.scrollTo(0,0); render(); return }
+    go({name:"phase",id:id,step:id===ROLLOUT_ID}); return }
+
+  if(t.dataset.col!==undefined){
+    COLLAPSED[t.dataset.col]=!COLLAPSED[t.dataset.col];
+    const sec=t.closest(".sec"), body=sec?sec.lastElementChild:null;
+    if(body){ body.hidden=!body.hidden;
+      const tw=t.querySelector(".tw"); if(tw) tw.textContent = body.hidden ? "+" : "\u2212"; }
+    else render();
+    return }
+
+  if(t.dataset.sel){ const ph=byId(VIEW.id);
+    ST.sel[ph.id] = ST.sel[ph.id]===t.dataset.sel ? "" : t.dataset.sel;
+    persist(); STEP=0; render(); return }
+
+  if(t.dataset.tog){
+    const ph=byId(VIEW.id);
+    const on=toggle(ph,t.dataset.tog);
+    t.classList.toggle("on",on);
+    const bx=t.querySelector(".bx"); if(bx) bx.textContent = on ? "\u2713" : "";
+    refreshSection(t); refreshChrome(ph);
+    return }
+
+  if(t.dataset.step){ const ph=byId(VIEW.id), rows=activeRows(ph), a=t.dataset.step;
+    if(a==="check"){ toggle(ph,rows[STEP].r.key,true); advance(ph) }
+    else if(a==="uncheck"){ toggle(ph,rows[STEP].r.key,false) }
+    else if(a==="next"){ STEP=Math.min(STEP+1,rows.length) }
+    else if(a==="prev"){ STEP=Math.max(0,STEP-1) }
+    else if(a==="restart"){ STEP=0 }
+    else if(a==="firstopen"){ const ck=ST.checks[ph.id]||{};
+      STEP=Math.max(0,rows.findIndex(o=>!ck[o.r.key])) }
+    window.scrollTo(0,0); render(); return }
+
+  const act=t.dataset.act;
+  if(act==="content"){ go({name:"content"}); return }
+
+  if(act==="reset"){ const ph=byId(VIEW.id);
+    if(pendingReset!==ph.id){ pendingReset=ph.id; t.textContent="TAP AGAIN TO CONFIRM";
+      t.classList.add("btn-stop"); setTimeout(()=>{ if(pendingReset===ph.id){pendingReset=null;render()} },4000);
+      return }
+    pendingReset=null; delete ST.checks[ph.id]; ST.sel[ph.id]=""; persist(); STEP=0; render(); return }
+
+  if(act==="reset-all"){
+    if(pendingReset!=="ALL"){ pendingReset="ALL"; t.textContent="TAP AGAIN TO CLEAR ALL PHASES";
+      setTimeout(()=>{ if(pendingReset==="ALL"){pendingReset=null;render()} },4000); return }
+    pendingReset=null; ST={checks:{},sel:{}}; persist(); render(); return }
+
+  if(act==="apply"){ const txt=el("ta").value;
+    let next; try{ next=parse(txt) }catch(err){ flash("msg","Could not read that: "+err.message,false); return }
+    if(!next.length){ flash("msg","No phases found. Every phase needs a line starting with #.",false); return }
+    const empty=next.filter(p=>!p.rows.some(r=>r.t==="I"));
+    if(empty.length){ flash("msg","Phase “"+empty[0].title+"” has no items.",false); return }
+    CONTENT=txt; PH=next; save(K_CONTENT,txt);
+    const n=next.reduce((s,p)=>s+p.rows.filter(r=>r.t==="I").length,0);
+    flash("msg","Applied. "+next.length+" phases, "+n+" items.",true); return }
+
+  if(act==="revert"){ CONTENT=CONTENT_DEFAULT; PH=parse(CONTENT);
+    try{localStorage.removeItem(K_CONTENT)}catch(err){}
+    render(); flash("msg","Reverted to the original checklist.",true); return }
+
+  if(act==="copy"){ const ta=el("ta");
+    (navigator.clipboard?navigator.clipboard.writeText(ta.value):Promise.reject())
+      .then(()=>flash("msg","Copied to the clipboard.",true))
+      .catch(()=>{ ta.select(); flash("msg","Selected the text. Copy it with your keyboard or long press.",true) });
+    return }
+});
+
+el("back").addEventListener("click",()=>{
+  if(VIEW.name==="phase"&&VIEW.step&&STEP>0){STEP=0;render();return}
+  go({name:"home"});
+});
+el("mode").addEventListener("click",()=>{
+  VIEW.step=!VIEW.step; STEP=0; window.scrollTo(0,0); render();
+});
+render();
+</script>
+<script>
+/* Offline: register the worker, and reload once when a new one takes over. */
+if ("serviceWorker" in navigator) {
+  addEventListener("load", function(){
+    navigator.serviceWorker.register("sw.js").catch(function(){});
+  });
+  var reloaded = false;
+  navigator.serviceWorker.addEventListener("controllerchange", function(){
+    if (reloaded) return; reloaded = true; location.reload();
+  });
+}
+</script>
+</body>
+</html>
