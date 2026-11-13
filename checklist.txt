@@ -49,21 +49,16 @@
 - Site number and campground map saved to phone
 - Campground rules and quiet hours reviewed
 - Route checked for bridge height, weight limits, and steep grades
-- Weather and wind forecast reviewed for travel day and the stay
-- Fuel stops identified with pull-through or truck lane access
-- Route and ETA shared with a family contact
 - Mail hold, package deliveries, and pet care arranged
 - Route grade and water availability at the destination evaluated
 - Fresh tank fill level decided for the route
-- Insurance card and registration on board
-- Roadside assistance number saved offline
 - Spare keys on board
 - Payment method on board
 ## SYSTEMS, SAFETY, AND RUNNING GEAR
 - Battery state of charge verified and adequate for the drive
 - Solar controller reading normal with no fault codes
 - Refrigerator powered and down to temperature before loading
-- Shore power or generator confirmed working as needed
+- Shore power plugs onboard & confirmed working as needed
 - Smoke, LP, and CO detectors tested
 - Fire extinguisher present with the gauge in the green
 - Fresh, gray, and black tank levels noted before departure
@@ -83,7 +78,7 @@
 - Backup and side cameras clean
 - Truck bed cargo secured or covered
 ## PROVISIONING AND LOADING
-- Groceries and cooler loaded
+- Groceries and car cooler loaded
 - Drinking water loaded
 - Medications and first aid kit checked and restocked
 - Black tank treatment on board
@@ -286,13 +281,11 @@
 ## GOAL - GET OUT AND LOOK BEFORE MOVING
 ! Stopped with the parking brake set and both people out
 ! Walkie talkies on, tested, and on the same channel
-! Path walked end to end on foot
-! Overhead clearance checked for branches, wires, and eaves
-! Ground checked for softness, holes, and stumps
-! Obstacles noted: posts, pedestals, spigots, and meters
+! Hand signals and a stop word agreed before moving
+! Path walked end to end on foot,
+! Ground checked for softness, holes, Obstacles noted: posts, pedestals, spigots, and meters
 ! Clearance confirmed on both sides at the widest point
 ! Turn and swing path clear
-! Hand signals and a stop word agreed before moving
 ! Weight distribution bar tension released, bars removed and stowed
 ## PARK AND SECURE
 - Trailer positioned in its storage spot
@@ -351,13 +344,12 @@ _
 # R Rollout Check :: ROLLOUT CHECK - RUN BEFORE THE WHEELS TURN :: ROLLOUT
 ?STOP
 ## GROUND LEVEL
-! Wheel chocks pulled and stowed
 ! X-chocks removed from between the tandem tires and stowed
 ! Leveling blocks collected and stowed @SETUP
 ! Jack pads collected and stowed @SETUP
 ! Stabilizer jacks fully retracted @SETUP
-! Tongue jack fully raised
-! Tongue jack foot stowed
+! Wheel chocks pulled and stowed
+! Tongue jack fully raised & foot stowed
 ! Nothing under the trailer: cords, hoses, tools, trash
 ! Ground checked for fresh drips
 ## INSIDE
