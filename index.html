@@ -250,28 +250,67 @@ textarea{width:100%;min-height:58vh;background:var(--sunk);color:var(--fg);
 
 <script>
 const CONTENT_DEFAULT = `
+// =====================================================================
+// 262RB ROLLOUT - CHECKLIST CONTENT
+//
+// Edit this file to change the checklist. Commit, and both phones pick
+// up the change on the next load with signal.
+//
+// LINE TYPES
+//   //  comment. Ignored. Use freely.
+//   #   phase.    # 7 Winterize :: WINTERIZE THE RIG :: WINTER
+//                 Three parts separated by :: are the id, the full
+//                 title, and the short name on the phase strip.
+//                 Keep the short name under 8 characters.
+//   ##  section.  ## TANKS AND PLUMBING
+//   -   item.     - Water pump off
+//   !   critical item. Holds the phase at NO GO until it is checked.
+//                 ! Breakaway cable attached to the truck frame
+//   _   blank write-in line.
+//
+// CONDITIONAL ITEMS
+//   Add @TAG to the end of an item and it greys out when the selector
+//   at the top of that phase makes it irrelevant.
+//     - Black valve confirmed closed @SEWER
+//
+//   SEWER    hidden unless the site has a sewer hookup
+//   WATER    hidden without a city water connection
+//   SHORE    hidden without shore power
+//   FRESH    shown only when running off the fresh tank
+//   BATT     shown only when dry camping
+//   SETUP    hidden on a quick stop where nothing was set up
+//   HITCHUP  hidden on a quick stop that stayed hitched
+//
+// SELECTORS
+//   ?SITE    site type picker  (Arrival, Camp Departure)
+//   ?STOP    stop type picker  (Rollout Check)
+//   Put it on the line right after the phase heading.
+//
+// RULES THAT MATTER
+//   Never put real values in here. No gate codes, reservation numbers,
+//   policy numbers or addresses. This repository is public.
+//   Tick marks are matched to item text, so reordering keeps them.
+//   Renaming an item clears its tick.
+//   Order within a phase is the order you work it.
+// =====================================================================
+
 # 1 Pre-Departure :: PRE-DEPARTURE (HOME BASE) :: PRE-DEP
-## TRIP PLANNING AND DOCUMENTS
-- Reservation confirmed and confirmation number saved offline
+## TRIP PLANNING & DOCUMENTS
+- Reservation confirmed and conf # saved offline
 - Gate code, office hours, and after-hours instructions captured
 - Site number and campground map saved to phone
 - Campground rules and quiet hours reviewed
 - Route checked for bridge height, weight limits, and steep grades
-- Weather and wind forecast reviewed for travel day and the stay
-- Fuel stops identified with pull-through or truck lane access
-- Route and ETA shared with a family contact
 - Mail hold, package deliveries, and pet care arranged
 - Route grade and water availability at the destination evaluated
 - Fresh tank fill level decided for the route
-- Insurance card and registration on board
-- Roadside assistance number saved offline
 - Spare keys on board
 - Payment method on board
 ## SYSTEMS, SAFETY, AND RUNNING GEAR
 - Battery state of charge verified and adequate for the drive
 - Solar controller reading normal with no fault codes
 - Refrigerator powered and down to temperature before loading
-- Shore power or generator confirmed working as needed
+- Shore power plugs onboard & confirmed working as needed
 - Smoke, LP, and CO detectors tested
 - Fire extinguisher present with the gauge in the green
 - Fresh, gray, and black tank levels noted before departure
@@ -291,7 +330,7 @@ const CONTENT_DEFAULT = `
 - Backup and side cameras clean
 - Truck bed cargo secured or covered
 ## PROVISIONING AND LOADING
-- Groceries and cooler loaded
+- Groceries and car cooler loaded
 - Drinking water loaded
 - Medications and first aid kit checked and restocked
 - Black tank treatment on board
@@ -328,14 +367,13 @@ const CONTENT_DEFAULT = `
 ## GOAL - GET OUT AND LOOK BEFORE MOVING
 ! Stopped with the parking brake set and both people out
 ! Walkie talkies on, tested, and on the same channel
+! Hand signals and a stop word agreed before moving
 ! Path walked end to end on foot
 ! Overhead clearance checked for branches, wires, and eaves
 ! Ground checked for softness, holes, and stumps
 ! Obstacles noted: posts, pedestals, spigots, and meters
 ! Clearance confirmed on both sides at the widest point
 ! Turn and swing path clear
-! Hand signals and a stop word agreed before moving
-! Weight distribution bar tension released, bars removed and stowed
 ## FUEL AND REST STOPS
 - Pull-through or exit path confirmed before committing to the lot
 - Hub and tire temperatures checked by hand at the first stop and each fuel stop
@@ -347,8 +385,8 @@ const CONTENT_DEFAULT = `
 ## OVERNIGHT STOP WITHOUT FULL SETUP
 - Parked level enough for the refrigerator and for sleeping
 - Chocks placed if unhitching
-- Jacks down only if needed
-- Doors locked and valuables out of sight
+- Jacks down only if needed, with a foot pad
+- Truck doors locked and valuables out of sight
 
 # 3 Arrival Setup :: CAMPGROUND ARRIVAL AND SETUP :: ARRIVE
 ?SITE
@@ -356,19 +394,19 @@ const CONTENT_DEFAULT = `
 - Reservation, site number, and length of stay confirmed
 - Available discounts asked about
 - Map, rules, quiet hours, and gate code collected
-- WiFi password collected
+- WiFi password collected, if using local WiFi
 - Dump station, trash, water fill, and restroom locations noted
 - Map and posted rules photographed
 ## GOAL - GET OUT AND LOOK BEFORE MOVING
 ! Stopped with the parking brake set and both people out
 ! Walkie talkies on, tested, and on the same channel
+! Hand signals and a stop word agreed before moving
 ! Path walked end to end on foot
 ! Overhead clearance checked for branches, wires, and eaves
 ! Ground checked for softness, holes, and stumps
 ! Obstacles noted: posts, pedestals, spigots, and meters
 ! Clearance confirmed on both sides at the widest point
 ! Turn and swing path clear
-! Hand signals and a stop word agreed before moving
 ! Weight distribution bar tension released, bars removed and stowed
 ## SCOUT THE SITE BEFORE COMMITTING
 ! Non-camp side (driver side) slide clearance verified
@@ -380,7 +418,7 @@ const CONTENT_DEFAULT = `
 ! Water spigot tested for pressure and appearance @WATER
 - Utility pedestal position matched to the connection points on the trailer
 - Fire ring, picnic table, and neighbor spacing considered
-- Different site requested if any of the above fails
+- Determine if different site requested if any of the above fails
 ## POSITION, LEVEL, AND UNHITCH
 - Spotter in place with walkie talkie, backing in slowly
 - Side to side level checked
@@ -410,28 +448,36 @@ const CONTENT_DEFAULT = `
 ## WATER
 ! Spigot purged before connecting anything @WATER
 - Pressure regulator installed at the spigot @WATER
-- Filter installed downstream of the regulator @WATER
-- Potable hose connected at the filter @WATER
-! Hose and filter purged of air and debris before connecting to the trailer @WATER
-- Potable hose connected to the trailer inlet @WATER
-- Spigot opened and all connections checked for leaks @WATER
+- Y-splitter attached at the regulator, both ballcock valves closed @WATER
+- Blue potable hose connected to the potable leg @WATER
+- Flush and wash hose connected to the second leg, trailer end stowed @WATER
+- Spigot opened @WATER
+! Potable ballcock opened and hose purged before connecting the filter @WATER
+- Filter connected at the trailer end, resting supported, not hanging @WATER
+! Filter purged before connecting to the trailer inlet @WATER
+- Braided jumper connected from the filter to the trailer city water inlet @WATER
+- All connections checked for leaks @WATER
+! Flush and wash ballcock confirmed closed @WATER
 - Fresh tank filled to the planned level @FRESH
 - Water pump on and system pressurized @FRESH
-- Water heater confirmed full and turned on
+- Water heater power on at heater and bathroom wall
 - Faucets, shower, and toilet checked for flow
 ## SEWER
 - Disposable safety gloves on @SEWER
+! Main dump valve confirmed closed @SEWER
+- Dump cap removed @SEWER
 ! Sewer hose connected with a tight seal at both ends @SEWER
 - Hose supported with continuous fall to the inlet @SEWER
 ! Black valve confirmed closed @SEWER
-- Gray valve position decided and set @SEWER
+- Gray tank 1 and 2 valves set per the stay plan @SEWER
+! Main dump valve opened @SEWER
 - Black tank treatment added @SEWER
 - Gloves removed and hands washed @SEWER
 ## DEPLOY AND SETTLE
 - Non-camp side slide extended after a final clearance check
 - Awning extended with a wind plan in mind
 - Steps lowered and footing verified
-- Roof vent cover opened
+- Cook side vent cover opened
 - Mat, chairs, table, and grill set out
 - Refrigerator confirmed cold and running on the current power source
 - Smoke, LP, and CO detectors verified operating
@@ -445,34 +491,18 @@ const CONTENT_DEFAULT = `
 ## GOAL - GET OUT AND LOOK BEFORE MOVING
 ! Stopped with the parking brake set and both people out
 ! Walkie talkies on, tested, and on the same channel
+! Hand signals and a stop word agreed before moving
 ! Path walked end to end on foot
 ! Overhead clearance checked for branches, wires, and eaves
 ! Ground checked for softness, holes, and stumps
 ! Obstacles noted: posts, pedestals, spigots, and meters
 ! Clearance confirmed on both sides at the widest point
 ! Turn and swing path clear
-! Hand signals and a stop word agreed before moving
-! Weight distribution bar tension released, bars removed and stowed
 ## INTERIOR PREP
 - Refrigerator packed tight for travel
 - Countertops, table, and floors cleared and wiped
 - Loose items put away in their travel places
 - Bath items stowed
-## TANKS
-- Disposable safety gloves on @SEWER
-- Black tank dumped first @SEWER
-- Black tank flushed until the discharge runs clear @SEWER
-- Gray tank dumped last to rinse the hose @SEWER
-- Valves closed and caps replaced @SEWER
-- Sewer hose rinsed and drained @SEWER
-- Gloves removed and hands washed @SEWER
-- Tank treatment added for travel @SEWER
-- Tanks dumped at the campground dump station on the way out @FRESH
-- Fresh water level set appropriately for the drive home
-## WATER DISCONNECT
-- Spigot closed @WATER
-- Hose disconnected and drained @WATER
-- Regulator and filter removed @WATER
 ## POWER DISCONNECT
 - Air conditioners and high draw loads off before disconnecting @SHORE
 ! Pedestal breaker off @SHORE
@@ -480,9 +510,44 @@ const CONTENT_DEFAULT = `
 - Battery state of charge confirmed adequate for travel @BATT
 - Solar controller confirmed producing @BATT
 ## BREAK CAMP
+- Cook side vent cover clicked shut
 - Awning dried if wet
 - Mat, chairs, table, grill, and site lighting collected
 - Non-camp side slide retracted after a clearance check
+## TANKS
+- Disposable safety gloves on @SEWER
+- Flush and wash hose connected to the trailer black flush inlet @SEWER
+- Gray tank 1 dumped to wet the hose @SEWER
+- Black tank dumped @SEWER
+- Black flush ballcock opened at the Y @SEWER
+- Black tank flushed until the discharge runs clear @SEWER
+! Black flush ballcock closed at the Y @SEWER
+- Flush hose disconnected from the trailer black flush inlet @SEWER
+- Gray tank 2 dumped last to rinse the hose @SEWER
+! Black, gray 1, and gray 2 valves all closed @SEWER
+! Main dump valve closed @SEWER
+- Sewer hose disconnected and drained @SEWER
+- Dump cap replaced and seated @SEWER
+- Sewer hose rinsed and stowed in its compartment @SEWER
+! Gloves removed and disposed, hands washed @SEWER
+- Kleen Tank, 8 oz with 1 to 2 gallons of water, added to the black tank
+- Soapy water added to the gray tank for the drive
+- Tanks dumped at the campground dump station on the way out @FRESH
+- Fresh water level set appropriately for the drive home
+## WATER DISCONNECT
+- Spigot closed @WATER
+- Potable ballcock opened to bleed pressure @WATER
+- Braided jumper disconnected at the trailer inlet @WATER
+- Filter removed and drained @WATER
+- Blue potable hose disconnected and drained @WATER
+- Flush and wash hose drained @WATER
+- Regulator and Y-splitter removed from the spigot @WATER
+- All hoses and fittings stowed in their compartments @WATER
+
+## SHUT DOWN
+- Water heater switched off at the bathroom wall
+- Water heater switched off at the heater outside
+! Propane off at the tanks
 ## LEAVE THE SITE BETTER
 ! Fire fully extinguished and cold to the touch
 - Site walked for stakes, tools, trash, and gear
@@ -494,13 +559,13 @@ const CONTENT_DEFAULT = `
 ## GOAL - GET OUT AND LOOK BEFORE MOVING
 ! Stopped with the parking brake set and both people out
 ! Walkie talkies on, tested, and on the same channel
+! Hand signals and a stop word agreed before moving
 ! Path walked end to end on foot
 ! Overhead clearance checked for branches, wires, and eaves
 ! Ground checked for softness, holes, and stumps
 ! Obstacles noted: posts, pedestals, spigots, and meters
 ! Clearance confirmed on both sides at the widest point
 ! Turn and swing path clear
-! Hand signals and a stop word agreed before moving
 ! Weight distribution bar tension released, bars removed and stowed
 ## PARK AND SECURE
 - Trailer positioned in its storage spot
@@ -508,7 +573,6 @@ const CONTENT_DEFAULT = `
 - X-chocks installed between the tandem tires
 - Leveled enough for the refrigerator and for drainage
 - Unhitched with the tongue jack on a pad
-- Weight distribution bars stowed
 - Stabilizer jacks set
 ## TANKS AND PLUMBING
 - Black and gray tanks dumped and flushed if not already done
@@ -525,7 +589,7 @@ const CONTENT_DEFAULT = `
 - Linens and towels removed for laundry
 - Floors vacuumed and surfaces wiped
 - Bathroom cleaned and dried
-- Windows and vents opened briefly to air the unit out
+- Windows and vent opened briefly to air the unit out
 - Cabinets left slightly open to prevent musty odors
 - Pest deterrents placed and entry points checked
 ## ELECTRICAL
@@ -539,6 +603,7 @@ const CONTENT_DEFAULT = `
 - Exterior washed if road grime or bugs are heavy
 - Awning fully dry before final retraction
 - Wet gear removed from compartments and dried
+- Potable hose flushed, drained, and ends capped before storage
 - Hoses, cord, and outdoor gear returned to assigned compartments
 - All exterior compartments closed and locked
 - Roof and seals given a visual check
@@ -556,75 +621,110 @@ _
 _
 _
 
+# D Dump Station :: DUMP STATION :: DUMP
+## APPROACH
+- Dump side confirmed before committing to the lane
+! Pull-forward exit path confirmed
+- Rig positioned to clear the next vehicle in the queue
+! Parking brake set
+- Disposable safety gloves on before touching anything
+## DUMP
+! Main dump valve confirmed closed before removing the cap
+- Dump cap removed
+! Sewer hose connected at the trailer and seated in the station inlet
+- Hose weighted or held so it cannot jump out under pressure
+! Main dump valve opened
+- Gray tank 1 dumped to wet the hose
+- Black tank dumped
+- Black tank flushed until the discharge runs clear
+- Gray tank 2 dumped last to rinse the hose
+! Black, gray 1, and gray 2 valves all closed
+! Main dump valve closed
+- Sewer hose drained into the inlet and pulled clear
+- Dump cap replaced and seated
+- Station rinse hose used on the area and the sewer hose only
+- Sewer hose rinsed and stowed in its compartment
+! Gloves removed and disposed, hands washed before touching anything clean
+- Kleen Tank, 8 oz with 1 to 2 gallons of water, added to the black tank
+- Soapy water added to the gray tank for the drive
+## FRESH WATER FILL
+! Potable fill spigot confirmed separate from the station rinse hose
+! Blue potable hose used, never the station rinse hose
+- Fresh tank filled to the planned level
+- Potable hose drained and stowed in its own compartment
+## BEFORE PULLING OUT
+! Dump cap seated and compartment latched
+! Nothing left at the station: hose, gloves, caps, tools
+- Area left clean for the next rig
+! Full walk-around before moving
+
 # R Rollout Check :: ROLLOUT CHECK - RUN BEFORE THE WHEELS TURN :: ROLLOUT
 ?STOP
-## GROUND LEVEL
-! Wheel chocks pulled and stowed
-! X-chocks removed from between the tandem tires and stowed
-! Leveling blocks collected and stowed @SETUP
-! Jack pads collected and stowed @SETUP
-! Stabilizer jacks fully retracted @SETUP
-! Tongue jack fully raised
-! Tongue jack foot stowed
-! Nothing under the trailer: cords, hoses, tools, trash
-! Ground checked for fresh drips
 ## INSIDE
+! Bedroom items secured for travel
+! Bedroom windows closed & latched
+! Bedroom Curtains up for travel
+! Bedroom door latch secured
 ! Countertops and table clear
 ! Floor clear of loose items
 ! Cabinets and drawers latched
-! Pantry door latched
-! Refrigerator door latched
 ! Refrigerator confirmed running for travel
-! Shower door secured
+! Refrigerator door latched
+! Bathroom roof fan off, vent closed secure
 - Bath items stowed
 - Toilet lid closed
+! Bathroom window latched,
+! Bathroom curtain up for travel
+! Bathroom door latch secured
 ! TV secured
-! Antenna lowered
 ! Water pump off
 ! Water heater off
-! Water heater bypass valves confirmed in the correct position @SETUP
-! Inverter off
 ! Fireplace off
-! Propane off at the tanks
 ! Tank heaters off
+! Propane off at the tanks
+// Inverter not installed yet
+! Inverter off
 - Interior lights off
-! Roof vents closed
-! Roof vent cover closed and latched
-! Fan hatches closed and secured
 ! All windows closed and latched
+! All curtains up for travel
 ## ON THE RIG
-! Power cord stowed and compartment latched @SETUP
-! Water hoses stowed and compartment latched @SETUP
-- Pressure regulator and filter stowed @SETUP
-- City water inlet capped @SETUP
-! Sewer hose stowed and compartment latched @SETUP
-- Surge protector stowed @SETUP
 ! Outdoor gear stowed: chairs, mat, table, grill, lighting @SETUP
 ! Awning fully retracted @SETUP
 ! Awning travel lock engaged @SETUP
+! Cook side vent cover clicked shut, above the tankless water heater
+! Power cord and surge protector stowed @SETUP
+! Water hoses, filter, and regulator stowed @SETUP
+! City water inlet capped @SETUP
+! Sewer hose stowed and compartment latched @SETUP
 ! Non-camp side slide fully retracted and seal seated
+! X-chocks removed from between the tandem tires and stowed @SETUP
 ! Slide-box exterior storage doors latched
 ! All bay hatches and compartment doors latched and locked
-! Screen door secured
-! Entry door closed, latched, and locked
 ! MorRyde steps fully stowed
 ! Step pin engaged
+! Entry door closed, latched, and locked
 ! Roof clear of branches, tools, and debris
 ## HITCH AND LIGHTS
 ! Tow vehicle backed to the coupler with a spotter on the walkie talkie @HITCHUP
 ! Coupler seated fully on the ball and latch closed
-! Coupler safety pin installed
+! Coupler safety lock installed and secured
 ! Weight distribution bars installed and tensioned
-- Sway control connected if separate from the bars @HITCHUP
 ! Safety chains crossed under the tongue and hooked to the truck
-! Breakaway cable attached to the truck frame, not the ball mount or chains
+! Breakaway cable attached to the truck, not the ball mount or chains
 ! 7-pin connector seated and cable routed with slack, off the ground
 ! Running and marker lights verified
 ! Brake and turn signals verified
 - Trailer sitting level front to rear at the hitch @HITCHUP
-! Trailer tire pressures and TPMS reading
 ! Mirrors extended and adjusted
-! Brake controller powered and gain set
+! Brake controller and gain set
+## GROUND LEVEL AND FINAL SWEEP
+! Leveling blocks collected and stowed @SETUP
+! Jack pads collected and stowed @SETUP
+! Stabilizer jacks fully retracted @SETUP
+! Wheel chocks pulled and stowed
+! Tongue jack fully raised and foot stowed
+! Nothing under the trailer: cords, hoses, tools, trash
+! Ground checked for fresh drips
 ! Departure area walked and clear of blocks, cords, and tools
 ! Full lap of the rig with fresh eyes
 `;
@@ -639,7 +739,7 @@ const SELECTORS = {
     ["FULL DEPARTURE (HITCHING UP)",[]],
     ["QUICK STOP (STAYED HITCHED)",["SETUP","HITCHUP"]]]}
 };
-const LINK_TO_ROLLOUT = ["1","2","4"];
+const LINK_TO_ROLLOUT = ["1","2","4","D"];
 const ROLLOUT_ID = "R";
 const K_STATE="rb262.state.v1", K_CONTENT="rb262.content.v1";
 
