@@ -196,7 +196,7 @@
 - Inverter energized and load plan set for the stay @BATT
 ## WATER
 ! Spigot purged before connecting anything @WATER
-- Y-Splitter attached, valves closed
+- Y-Splitter attached, valves closed @WATER
 - Pressure regulator installed at the spigot @WATER
 - Filter installed downstream of the regulator @WATER
 - Potable hose connected at the filter @WATER
@@ -219,7 +219,7 @@
 - Non-camp side slide extended after a final clearance check
 - Awning extended with a wind plan in mind
 - Steps lowered and footing verified
-- Roof vent cover opened
+- Cook side vent cover opened
 - Mat, chairs, table, and grill set out
 - Refrigerator confirmed cold and running on the current power source
 - Smoke, LP, and CO detectors verified operating
@@ -245,13 +245,25 @@
 - Countertops, table, and floors cleared and wiped
 - Loose items put away in their travel places
 - Bath items stowed
+## POWER DISCONNECT
+- Air conditioners and high draw loads off before disconnecting @SHORE
+! Pedestal breaker off @SHORE
+- Cord unplugged and surge protector removed from the pedestal @SHORE
+- Battery state of charge confirmed adequate for travel @BATT
+- Solar controller confirmed producing @BATT
+## BREAK CAMP
+- Cook side vent cover clicked shut
+- Awning dried if wet
+- Mat, chairs, table, grill, and site lighting collected
+- Non-camp side slide retracted after a clearance check
 ## TANKS
 - Disposable safety gloves on @SEWER
 - Gray tank 1 dumped first @SEWER
-- Black tank dumped first @SEWER
+- Black tank dump @SEWER
 - Black tank flushed until the discharge runs clear @SEWER
-- Gray tank dumped last to rinse the hose @SEWER
-- Valves closed and caps replaced @SEWER
+- Gray tank 2 dumped last to rinse the hose @SEWER
+- 3 Tank Valves closed @SEWER
+- Main dump valve closed and cap replaced @SEWER
 - Sewer hose rinsed and drained @SEWER
 - Gloves removed and hands washed @SEWER
 - Tank treatment added for travel @SEWER
@@ -261,16 +273,7 @@
 - Spigot closed @WATER
 - Hose disconnected and drained @WATER
 - Regulator and filter removed @WATER
-## POWER DISCONNECT
-- Air conditioners and high draw loads off before disconnecting @SHORE
-! Pedestal breaker off @SHORE
-- Cord unplugged and surge protector removed from the pedestal @SHORE
-- Battery state of charge confirmed adequate for travel @BATT
-- Solar controller confirmed producing @BATT
-## BREAK CAMP
-- Awning dried if wet
-- Mat, chairs, table, grill, and site lighting collected
-- Non-camp side slide retracted after a clearance check
+
 ## LEAVE THE SITE BETTER
 ! Fire fully extinguished and cold to the touch
 - Site walked for stakes, tools, trash, and gear
@@ -284,7 +287,8 @@
 ! Walkie talkies on, tested, and on the same channel
 ! Hand signals and a stop word agreed before moving
 ! Path walked end to end on foot,
-! Ground checked for softness, holes, Obstacles noted: posts, pedestals, spigots, and meters
+! Ground checked for softness, holes, 
+! Obstacles noted: posts, pedestals, spigots, and meters
 ! Clearance confirmed on both sides at the widest point
 ! Turn and swing path clear
 ! Weight distribution bar tension released, bars removed and stowed
@@ -311,7 +315,7 @@
 - Linens and towels removed for laundry
 - Floors vacuumed and surfaces wiped
 - Bathroom cleaned and dried
-- Windows and vents opened briefly to air the unit out
+- Windows and vent opened briefly to air the unit out
 - Cabinets left slightly open to prevent musty odors
 - Pest deterrents placed and entry points checked
 ## ELECTRICAL
@@ -354,7 +358,7 @@ _
 ! Cabinets and drawers latched
 ! Refrigerator confirmed running for travel
 ! Refrigerator door latched
-! Bathroom Roof vent closed secure, fan off
+! Bathroom roof fan off, vent closed secure
 - Bath items stowed
 - Toilet lid closed
 ! Bathroom window latched, 
@@ -368,20 +372,12 @@ _
 - Interior lights off
 ! All windows closed and latched
 ! All curtains up for travel
-## GROUND LEVEL
-! X-chocks removed from between the tandem tires and stowed
-! Leveling blocks collected and stowed @SETUP
-! Jack pads collected and stowed @SETUP
-! Stabilizer jacks fully retracted @SETUP
-! Wheel chocks pulled and stowed
-! Tongue jack fully raised & foot stowed
-! Nothing under the trailer: cords, hoses, tools, trash
-! Ground checked for fresh drips
 ## ON THE RIG
 ! Inverter off (not relevant yet)
 ! Outdoor gear stowed: chairs, mat, table, grill, lighting @SETUP
 ! Awning fully retracted @SETUP
-! Awning travel lock engaged @SETUP
+! X-chocks removed from between the tandem tires and stowed
+! Cook side vent cover clicked shut, above the tankless water heater
 ! Non-camp side slide fully retracted and seal seated
 ! Slide-box exterior storage doors latched
 ! Power cord & surge protector stowed 
@@ -389,7 +385,7 @@ _
 - Pressure regulator and filter stowed 
 - City water inlet capped @SETUP
 ! Sewer hose stowed and compartment latched @SETUP
-! All bay hatches and compartment doors latched and locked @SETUP
+! All bay hatches and compartment doors latched and locked
 ! MorRyde steps fully stowed
 ! Step pin engaged
 ! Entry door closed, latched, and locked
@@ -409,3 +405,11 @@ _
 ! Full lap of the rig with fresh eyes
 ! Mirrors extended and adjusted
 ! Brake controller and gain set
+## GROUND LEVEL AND FINAL SWEEP
+! Leveling blocks collected and stowed @SETUP
+! Jack pads collected and stowed @SETUP
+! Stabilizer jacks fully retracted @SETUP
+! Wheel chocks pulled and stowed
+! Tongue jack fully raised & foot stowed
+! Nothing under the trailer: cords, hoses, tools, trash
+! Ground checked for fresh drips
