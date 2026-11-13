@@ -115,14 +115,13 @@
 ## GOAL - GET OUT AND LOOK BEFORE MOVING
 ! Stopped with the parking brake set and both people out
 ! Walkie talkies on, tested, and on the same channel
+! Hand signals and a stop word agreed before moving
 ! Path walked end to end on foot
 ! Overhead clearance checked for branches, wires, and eaves
 ! Ground checked for softness, holes, and stumps
 ! Obstacles noted: posts, pedestals, spigots, and meters
 ! Clearance confirmed on both sides at the widest point
 ! Turn and swing path clear
-! Hand signals and a stop word agreed before moving
-! Weight distribution bar tension released, bars removed and stowed
 ## FUEL AND REST STOPS
 - Pull-through or exit path confirmed before committing to the lot
 - Hub and tire temperatures checked by hand at the first stop and each fuel stop
@@ -134,8 +133,8 @@
 ## OVERNIGHT STOP WITHOUT FULL SETUP
 - Parked level enough for the refrigerator and for sleeping
 - Chocks placed if unhitching
-- Jacks down only if needed
-- Doors locked and valuables out of sight
+- Jacks down only if needed, with a foot pad
+- Truck doors locked and valuables out of sight
 
 # 3 Arrival Setup :: CAMPGROUND ARRIVAL AND SETUP :: ARRIVE
 ?SITE
@@ -143,19 +142,19 @@
 - Reservation, site number, and length of stay confirmed
 - Available discounts asked about
 - Map, rules, quiet hours, and gate code collected
-- WiFi password collected
+- WiFi password collected, if using local WiFi
 - Dump station, trash, water fill, and restroom locations noted
 - Map and posted rules photographed
 ## GOAL - GET OUT AND LOOK BEFORE MOVING
 ! Stopped with the parking brake set and both people out
 ! Walkie talkies on, tested, and on the same channel
+! Hand signals and a stop word agreed before moving
 ! Path walked end to end on foot
 ! Overhead clearance checked for branches, wires, and eaves
 ! Ground checked for softness, holes, and stumps
 ! Obstacles noted: posts, pedestals, spigots, and meters
 ! Clearance confirmed on both sides at the widest point
 ! Turn and swing path clear
-! Hand signals and a stop word agreed before moving
 ! Weight distribution bar tension released, bars removed and stowed
 ## SCOUT THE SITE BEFORE COMMITTING
 ! Non-camp side (driver side) slide clearance verified
@@ -167,7 +166,7 @@
 ! Water spigot tested for pressure and appearance @WATER
 - Utility pedestal position matched to the connection points on the trailer
 - Fire ring, picnic table, and neighbor spacing considered
-- Different site requested if any of the above fails
+- Determine if different site requested if any of the above fails
 ## POSITION, LEVEL, AND UNHITCH
 - Spotter in place with walkie talkie, backing in slowly
 - Side to side level checked
@@ -184,6 +183,7 @@
 - Tow vehicle pulled forward and parked
 - Front to rear level set with the tongue jack
 - Stabilizer jacks lowered to firm contact without lifting the frame
+- Weight distribution bars removed and stowed
 ## POWER
 ! Pedestal breaker off before connecting anything @SHORE
 - Surge protector installed at the pedestal @SHORE
@@ -196,6 +196,7 @@
 - Inverter energized and load plan set for the stay @BATT
 ## WATER
 ! Spigot purged before connecting anything @WATER
+- Y-Splitter attached, valves closed
 - Pressure regulator installed at the spigot @WATER
 - Filter installed downstream of the regulator @WATER
 - Potable hose connected at the filter @WATER
@@ -204,7 +205,7 @@
 - Spigot opened and all connections checked for leaks @WATER
 - Fresh tank filled to the planned level @FRESH
 - Water pump on and system pressurized @FRESH
-- Water heater confirmed full and turned on
+- Water heater power on at heater and bathroom wall
 - Faucets, shower, and toilet checked for flow
 ## SEWER
 - Disposable safety gloves on @SEWER
@@ -232,14 +233,13 @@
 ## GOAL - GET OUT AND LOOK BEFORE MOVING
 ! Stopped with the parking brake set and both people out
 ! Walkie talkies on, tested, and on the same channel
+! Hand signals and a stop word agreed before moving
 ! Path walked end to end on foot
 ! Overhead clearance checked for branches, wires, and eaves
 ! Ground checked for softness, holes, and stumps
 ! Obstacles noted: posts, pedestals, spigots, and meters
 ! Clearance confirmed on both sides at the widest point
 ! Turn and swing path clear
-! Hand signals and a stop word agreed before moving
-! Weight distribution bar tension released, bars removed and stowed
 ## INTERIOR PREP
 - Refrigerator packed tight for travel
 - Countertops, table, and floors cleared and wiped
@@ -247,6 +247,7 @@
 - Bath items stowed
 ## TANKS
 - Disposable safety gloves on @SEWER
+- Gray tank 1 dumped first @SEWER
 - Black tank dumped first @SEWER
 - Black tank flushed until the discharge runs clear @SEWER
 - Gray tank dumped last to rinse the hose @SEWER
@@ -343,6 +344,30 @@ _
 
 # R Rollout Check :: ROLLOUT CHECK - RUN BEFORE THE WHEELS TURN :: ROLLOUT
 ?STOP
+## INSIDE
+! Bedroom items secured for travel
+! Bedroom windows closed & latched
+! Bedroom Curtains up for travel
+! Bedroom door latch secured
+! Countertops and table clear
+! Floor clear of loose items
+! Cabinets and drawers latched
+! Refrigerator confirmed running for travel
+! Refrigerator door latched
+! Bathroom Roof vent closed secure, fan off
+- Bath items stowed
+- Toilet lid closed
+! Bathroom window latched, 
+! Bathroom curtain up for travel
+! Bathroom door latch secured 
+! TV secured
+! Water pump off
+! Water heater off
+! Fireplace off
+! Tank heaters off
+- Interior lights off
+! All windows closed and latched
+! All curtains up for travel
 ## GROUND LEVEL
 ! X-chocks removed from between the tandem tires and stowed
 ! Leveling blocks collected and stowed @SETUP
@@ -352,62 +377,35 @@ _
 ! Tongue jack fully raised & foot stowed
 ! Nothing under the trailer: cords, hoses, tools, trash
 ! Ground checked for fresh drips
-## INSIDE
-! Countertops and table clear
-! Floor clear of loose items
-! Cabinets and drawers latched
-! Pantry door latched
-! Refrigerator door latched
-! Refrigerator confirmed running for travel
-! Shower door secured
-- Bath items stowed
-- Toilet lid closed
-! TV secured
-! Antenna lowered
-! Water pump off
-! Water heater off
-! Water heater bypass valves confirmed in the correct position @SETUP
-! Inverter off
-! Fireplace off
-! Propane off at the tanks
-! Tank heaters off
-- Interior lights off
-! Roof vents closed
-! Roof vent cover closed and latched
-! Fan hatches closed and secured
-! All windows closed and latched
 ## ON THE RIG
-! Power cord stowed and compartment latched @SETUP
-! Water hoses stowed and compartment latched @SETUP
-- Pressure regulator and filter stowed @SETUP
-- City water inlet capped @SETUP
-! Sewer hose stowed and compartment latched @SETUP
-- Surge protector stowed @SETUP
+! Inverter off (not relevant yet)
 ! Outdoor gear stowed: chairs, mat, table, grill, lighting @SETUP
 ! Awning fully retracted @SETUP
 ! Awning travel lock engaged @SETUP
 ! Non-camp side slide fully retracted and seal seated
 ! Slide-box exterior storage doors latched
-! All bay hatches and compartment doors latched and locked
-! Screen door secured
-! Entry door closed, latched, and locked
+! Power cord & surge protector stowed 
+! Water hoses stowed
+- Pressure regulator and filter stowed 
+- City water inlet capped @SETUP
+! Sewer hose stowed and compartment latched @SETUP
+! All bay hatches and compartment doors latched and locked @SETUP
 ! MorRyde steps fully stowed
 ! Step pin engaged
+! Entry door closed, latched, and locked
 ! Roof clear of branches, tools, and debris
 ## HITCH AND LIGHTS
 ! Tow vehicle backed to the coupler with a spotter on the walkie talkie @HITCHUP
 ! Coupler seated fully on the ball and latch closed
-! Coupler safety pin installed
+! Coupler safety lock installed and secured
 ! Weight distribution bars installed and tensioned
-- Sway control connected if separate from the bars @HITCHUP
 ! Safety chains crossed under the tongue and hooked to the truck
-! Breakaway cable attached to the truck frame, not the ball mount or chains
+! Breakaway cable attached to the truck, not the ball mount or chains
 ! 7-pin connector seated and cable routed with slack, off the ground
 ! Running and marker lights verified
 ! Brake and turn signals verified
 - Trailer sitting level front to rear at the hitch @HITCHUP
-! Trailer tire pressures and TPMS reading
-! Mirrors extended and adjusted
-! Brake controller powered and gain set
 ! Departure area walked and clear of blocks, cords, and tools
 ! Full lap of the rig with fresh eyes
+! Mirrors extended and adjusted
+! Brake controller and gain set
