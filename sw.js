@@ -1,9 +1,10 @@
 /* 262RB Rollout - offline worker.
    Bump VERSION whenever index.html changes, or phones keep the old copy. */
-const VERSION = "v4";
+const VERSION = "v5";
 const CACHE   = "rb262-" + VERSION;
 const SHELL   = ["./", "./index.html", "./checklist.txt", "./manifest.webmanifest",
-                 "./icon-192.png", "./icon-512.png", "./icon-512-maskable.png"];
+                 "./icon-192.png", "./icon-512.png", "./icon-512-maskable.png",
+                 "./break-camp-water-sewer.html"];
 
 self.addEventListener("install", e => {
   e.waitUntil(
@@ -43,7 +44,25 @@ self.addEventListener("fetch", e => {
     return;
   }
 
-  // A navigation always gets the app shell, so a cold start works offline.
+  // Companion pages (any .html other than index.html) go network-first,
+  // so edits arrive with signal and the cached copy covers offline.
+  const p = url.pathname;
+  const isPage = req.mode === "navigate" && url.origin === location.origin &&
+                 p.endsWith(".html") && !p.endsWith("/index.html");
+  if (isPage) {
+    e.respondWith(
+      fetch(req).then(res => {
+        if (res && res.ok) {
+          const copy = res.clone();
+          caches.open(CACHE).then(c => c.put(req, copy)).catch(() => {});
+        }
+        return res;
+      }).catch(() => caches.match(req, { ignoreSearch: true }))
+    );
+    return;
+  }
+
+  // Any other navigation gets the app shell, so a cold start works offline.
   if (req.mode === "navigate") {
     e.respondWith(
       caches.match("./index.html").then(hit => hit || fetch(req))

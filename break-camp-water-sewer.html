@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#151f27">
+<title>Break Camp: Water, Sewer, and Tank Treatment | 262RB</title>
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Same instrument-panel tokens as the 262RB Rollout app (index.html). */
+:root{
+  --bg:#eef1f4; --surface:#ffffff; --surface-2:#e2e7ec; --sunk:#d7dee4;
+  --fg:#16202a; --fg-dim:#5c6b78; --line:#c7d2da;
+  --accent:#0d6b76; --accent-fg:#ffffff;
+  --go:#1a7a3e; --go-bg:#d7f0e0; --go-line:#9ed4b4;
+  --warn:#8c5a00; --warn-bg:#fcecc9; --warn-line:#e2bf74;
+  --stop:#a31f27; --stop-bg:#fadadd; --stop-line:#eaa3a8;
+  --f-ui:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --f-cond:"IBM Plex Sans Condensed","IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
+  --r:10px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0c1318; --surface:#151f27; --surface-2:#1c2832; --sunk:#0a1015;
+  --fg:#e7eef3; --fg-dim:#90a3b1; --line:#2a3a46;
+  --accent:#3cb6c3; --accent-fg:#06181b;
+  --go:#4fd086; --go-bg:#0f3123; --go-line:#1f6b47;
+  --warn:#e8ab42; --warn-bg:#3a2c0f; --warn-line:#7a5c1c;
+  --stop:#f4737a; --stop-bg:#3d161a; --stop-line:#7d2f36;
+  color-scheme:dark}}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-ui);
+  font-size:16px;line-height:1.5;-webkit-text-size-adjust:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);
+  z-index:40;background:var(--surface)}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.gut{padding-left:max(16px,env(safe-area-inset-left,0px));
+     padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:720px;margin:0 auto}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+
+/* ---- top bar ---------------------------------------------------- */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--surface);
+  border-bottom:1px solid var(--line)}
+.bar-in{display:flex;align-items:center;gap:10px;padding-block:8px;min-height:48px}
+.bar-in h1{font-family:var(--f-cond);font-size:17px;font-weight:700;margin:0;flex:1;min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ib{display:flex;align-items:center;justify-content:center;min-width:44px;height:40px;
+  border-radius:8px;color:var(--fg-dim);font-family:var(--f-cond);font-weight:700;font-size:13px;
+  letter-spacing:.06em;padding:0 10px;border:1px solid var(--line);background:var(--surface-2);
+  text-decoration:none;white-space:nowrap}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-block:7px;scrollbar-width:none;
+  border-top:1px solid var(--line)}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;display:flex;align-items:center;padding:0 12px;min-height:36px;
+  border-radius:999px;border:1px solid var(--line);background:var(--surface-2);color:var(--fg);
+  font-family:var(--f-cond);font-weight:700;font-size:12.5px;letter-spacing:.07em;
+  white-space:nowrap;text-decoration:none}
+.tab:active{background:var(--accent);color:var(--accent-fg)}
+
+/* ---- content ---------------------------------------------------- */
+main{padding-block:16px 48px}
+.intro{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--accent);
+  border-radius:var(--r);padding:14px 16px}
+.intro .eb{font-family:var(--f-cond);font-size:12px;font-weight:700;letter-spacing:.12em;
+  color:var(--fg-dim);text-transform:uppercase;margin:0 0 4px}
+.intro h2{font-family:var(--f-cond);font-size:24px;line-height:1.15;margin:0 0 8px}
+.intro p{margin:6px 0 0;font-size:15px}
+
+section{margin-top:18px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+  background:var(--surface);scroll-margin-top:110px}
+.sec-h{display:flex;align-items:baseline;gap:10px;padding:11px 14px;background:var(--surface-2);
+  border-bottom:1px solid var(--line)}
+.sec-h .n{font-family:var(--f-mono);font-size:12px;color:var(--fg-dim);flex:none}
+.sec-h h3{margin:0;font-family:var(--f-cond);font-size:15px;font-weight:700;letter-spacing:.07em;
+  text-transform:uppercase}
+.sec-b{padding:12px 14px 14px}
+.sec-b>p{margin:0 0 10px;font-size:15px}
+.sec-b>p:last-child{margin-bottom:0}
+.purpose{color:var(--fg-dim);font-size:14px!important}
+
+ol.steps{list-style:none;margin:0;padding:0;counter-reset:s}
+ol.steps>li{counter-increment:s;position:relative;padding:11px 0 11px 40px;
+  border-top:1px solid var(--line);font-size:15.5px;line-height:1.4}
+ol.steps>li:first-child{border-top:0;padding-top:4px}
+ol.steps>li::before{content:counter(s);position:absolute;left:0;top:9px;width:28px;height:28px;
+  border-radius:7px;background:var(--surface-2);border:1px solid var(--line);
+  font-family:var(--f-mono);font-size:13px;font-weight:600;display:flex;align-items:center;
+  justify-content:center}
+ol.steps>li:first-child::before{top:2px}
+ol.steps b.t{display:block;font-family:var(--f-cond);font-size:16px;letter-spacing:.01em}
+ol.steps ul{margin:6px 0 0;padding-left:18px}
+ol.steps ul li{margin:3px 0}
+.crit{display:inline-block;font-family:var(--f-cond);font-size:11px;font-weight:700;
+  letter-spacing:.08em;padding:1px 7px;border-radius:999px;border:1px solid var(--stop-line);
+  background:var(--stop-bg);color:var(--stop);margin-left:6px;vertical-align:2px}
+ul.plain{margin:0;padding-left:20px}
+ul.plain li{margin:5px 0;font-size:15px}
+
+/* ---- labeled callouts: the label carries the meaning, color only helps */
+.co{border:1px solid;border-left-width:5px;border-radius:8px;padding:10px 12px;margin:12px 0 0;
+  font-size:14.5px;line-height:1.45}
+.co:first-child{margin-top:0}
+.co .lb{display:block;font-family:var(--f-cond);font-weight:700;font-size:12.5px;
+  letter-spacing:.12em;margin-bottom:3px}
+.co p{margin:4px 0 0}
+.co ul{margin:4px 0 0;padding-left:18px}
+.co-warn{background:var(--stop-bg);border-color:var(--stop-line);border-left-color:var(--stop)}
+.co-warn .lb{color:var(--stop)}
+.co-fix{background:var(--warn-bg);border-color:var(--warn-line);border-left-color:var(--warn)}
+.co-fix .lb{color:var(--warn)}
+.co-check{background:var(--go-bg);border-color:var(--go-line);border-left-color:var(--go)}
+.co-check .lb{color:var(--go)}
+.co-note{background:var(--surface-2);border-color:var(--line);border-left-color:var(--fg-dim)}
+.co-note .lb{color:var(--fg-dim)}
+
+/* checklists */
+ul.chk{list-style:none;margin:0;padding:0}
+ul.chk li{position:relative;padding:8px 0 8px 30px;border-top:1px solid var(--line);font-size:15px}
+ul.chk li:first-child{border-top:0;padding-top:2px}
+ul.chk li::before{content:"";position:absolute;left:2px;top:10px;width:16px;height:16px;
+  border:2px solid var(--fg-dim);border-radius:4px}
+ul.chk li:first-child::before{top:4px}
+
+/* tables */
+.tw{overflow-x:auto;margin:10px 0 0;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{background:var(--surface-2);font-family:var(--f-cond);font-weight:700;font-size:12.5px;
+  letter-spacing:.08em;text-transform:uppercase}
+td.num{font-family:var(--f-mono);white-space:nowrap}
+
+.scen{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.scen div{border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--surface-2);
+  font-size:14px}
+.scen b{display:block;font-family:var(--f-cond);font-size:13px;letter-spacing:.08em;
+  text-transform:uppercase;margin-bottom:3px}
+@media (max-width:520px){.scen{grid-template-columns:1fr}}
+
+.src{font-size:13.5px;color:var(--fg-dim)}
+.src li{margin:4px 0}
+footer{margin-top:22px;text-align:center;font-size:12.5px;color:var(--fg-dim)}
+
+@media print{
+  body{background:#fff;color:#000;font-size:12pt}
+  .top{position:static}
+  .tabs,.ib{display:none}
+  section,.intro,.co,.tw{break-inside:avoid;box-shadow:none}
+  ol.steps>li{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap gut">
+    <div class="bar-in">
+      <h1>Break Camp: Water, Sewer &amp; Tanks</h1>
+      <a class="ib" href="./" aria-label="Back to the 262RB Rollout checklist">ROLLOUT</a>
+    </div>
+    <nav class="tabs" aria-label="Sections">
+      <a class="tab" href="#prep">PREP</a>
+      <a class="tab" href="#connect">CONNECT</a>
+      <a class="tab" href="#black">BLACK</a>
+      <a class="tab" href="#gray">GRAY</a>
+      <a class="tab" href="#hose">HOSE</a>
+      <a class="tab" href="#recharge">RECHARGE</a>
+      <a class="tab" href="#water">WATER</a>
+      <a class="tab" href="#inspect">INSPECT</a>
+      <a class="tab" href="#arrive">ARRIVE</a>
+      <a class="tab" href="#midtrip">MID-TRIP</a>
+      <a class="tab" href="#valves">VALVES</a>
+      <a class="tab" href="#mix">MIX</a>
+      <a class="tab" href="#safety">SAFETY</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap gut">
+
+<div class="intro">
+  <p class="eb">Alliance Delta 262RB</p>
+  <h2>Break Camp: Water, Sewer, and Tank Treatment</h2>
+  <p>This guide covers dumping and flushing all three holding tanks, recharging them with the Kleen Tank solution, disconnecting and storing hoses, and the final walkaround. It follows the same order as the Tanks and Water Disconnect sections of the Camp Departure checklist in the Rollout app.</p>
+  <div class="scen">
+    <div><b>Full hookup site</b>The sewer hose is already connected from setup. Skip to Phase 2. City water stays connected until the tanks are recharged.</div>
+    <div><b>Dump station on the way out</b>Start at Phase 1. Fill a 3 to 5 gallon water container at the site spigot before you leave the site.</div>
+  </div>
+  <div class="co co-fix">
+    <span class="lb">CORRECTION TO THE OWNER'S GUIDE</span>
+    The Alliance Owner's Guide has you remove the RV outlet cap and connect the hose at the RV before the other end reaches the dump inlet. That leaves the outlet open while you route the hose. This guide reverses the order: connect at the dump inlet first, route the hose, and expose the RV outlet only when the receiving end is secured and the main dump valve is closed.
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<section id="prep">
+  <div class="sec-h"><span class="n">00</span><h3>Before You Start</h3></div>
+  <div class="sec-b">
+    <ul class="chk">
+      <li>Disposable safety gloves on</li>
+      <li>Sewer hose, flush and wash hose (non-potable), and blue potable hose on hand. The flush and wash hose is never used for drinking water.</li>
+      <li>Kleen Tank jug shaken, plus an 8 oz measuring cup</li>
+      <li>A marked 1 gallon jug for measuring priming water</li>
+      <li>Dump station only: 3 to 5 gallon water container filled at the site spigot</li>
+      <li>Bucket or towel for drips</li>
+      <li>Three tank valves located on the driver side underbelly, aft of the rear tires: black, gray 1, and gray 2. Main dump valve located.</li>
+      <li>Black flush inlet located on the driver side convenience center</li>
+      <li>Pressure regulator in place. Never exceed 50 PSI into the black flush inlet.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="connect">
+  <div class="sec-h"><span class="n">01</span><h3>Phase 1: Connect the Sewer Hose (Dump Station)</h3></div>
+  <div class="sec-b">
+    <p class="purpose">At a full hookup site the hose is already connected from setup. Confirm both ends are tight and the main dump valve is open, then go to Phase 2.</p>
+    <ol class="steps">
+      <li><b class="t">Confirm the main dump valve is closed <span class="crit">CRITICAL</span></b>Push the handle fully in. It should feel solid.</li>
+      <li><b class="t">Connect at the dump inlet first</b>Attach one end of the sewer hose to the dump station inlet, hand tight and sealed. Tug gently to confirm it does not slip. Lay the hose back to the RV with a continuous downhill fall to the inlet.</li>
+      <li><b class="t">Connect at the RV outlet</b>Remove the outlet cap (turn counterclockwise, then pull down) and set it where it will not roll away. Attach the hose, seat it fully, and tug to confirm.</li>
+      <li><b class="t">Open the main dump valve</b>The path from tanks to inlet is now complete and sealed.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="black">
+  <div class="sec-h"><span class="n">02</span><h3>Phase 2: Wet the Hose, Dump and Flush Black</h3></div>
+  <div class="sec-b">
+    <ol class="steps">
+      <li><b class="t">Connect the flush and wash hose</b>Connect it to the black flush inlet on the trailer.
+        <ul>
+          <li>Full hookup: the other end is already on the second leg of the Y-splitter at the spigot, with its ballcock closed.</li>
+          <li>Dump station: connect the other end to the station's rinse spigot. Leave the spigot off.</li>
+        </ul></li>
+      <li><b class="t">Dump gray 1 to wet the hose</b>Open the gray 1 valve fully. When the flow stops, push it fully closed. Wetting the hose first reduces splashing and sticking when the black tank goes.</li>
+      <li><b class="t">Dump the black tank</b>Pull the black valve fully open. Flow runs about 3 to 5 minutes. Stay with it and listen. Silence or only drips means the tank is empty.</li>
+      <li><b class="t">Flush the black tank <span class="crit">DO NOT SKIP</span></b>Leave the black valve open. Open the black flush ballcock at the Y (or the dump station spigot). Flush about 2 to 5 minutes until the discharge runs clear.</li>
+      <li><b class="t">Shut off the flush water <span class="crit">CRITICAL</span></b>Close the black flush ballcock at the Y (or the spigot). Let the tank finish draining, then push the black valve fully closed.</li>
+      <li><b class="t">Disconnect the flush and wash hose</b>Remove it from the black flush inlet. Keep it away from the blue potable hose.</li>
+    </ol>
+    <div class="co co-warn">
+      <span class="lb">WARNING</span>
+      Never run flush water with the black valve closed. The tank can overfill and back up into the toilet.
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="gray">
+  <div class="sec-h"><span class="n">03</span><h3>Phase 3: Dump Gray 2 and Close Up</h3></div>
+  <div class="sec-b">
+    <ol class="steps">
+      <li><b class="t">Dump gray 2 last to rinse the hose</b>Open the gray 2 valve fully. Flow runs about 2 to 3 minutes. The soapy gray water carries residue out of the hose. When the flow stops, push the valve fully closed.</li>
+      <li><b class="t">Confirm all three tank valves are closed <span class="crit">CRITICAL</span></b>Black, gray 1, and gray 2. Push each handle straight in until it is solid.</li>
+      <li><b class="t">Close the main dump valve <span class="crit">CRITICAL</span></b></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="hose">
+  <div class="sec-h"><span class="n">04</span><h3>Phase 4: Disconnect, Drain, and Store the Sewer Hose</h3></div>
+  <div class="sec-b">
+    <ol class="steps">
+      <li><b class="t">Disconnect at the RV</b>Loosen the hose by hand (counterclockwise) with a bucket or towel ready for drips.</li>
+      <li><b class="t">Replace the outlet cap immediately</b>Screw it on clockwise until it is hand tight and fully seated.</li>
+      <li><b class="t">Drain the hose</b>Raise the RV end 12 to 18 inches and walk it toward the inlet so the contents run downhill. At the inlet, lift the end as high as you can reach and hold 30 to 60 seconds until the flow stops.</li>
+      <li><b class="t">Rinse the hose interior</b>Run water from the flush and wash hose through the sewer hose for 30 to 60 seconds, until the outflow runs clear.</li>
+      <li><b class="t">Disconnect at the inlet</b>Remove the hose from the dump inlet.</li>
+      <li><b class="t">Store the sewer hose</b>Coil it loosely in a 3 to 4 foot loop with no kinks. Let it air dry when time allows, then stow it in its own compartment. Never store it outside the RV or with the blue potable hose.</li>
+      <li><b class="t">Gloves off, hands washed <span class="crit">CRITICAL</span></b>Do this before handling anything inside the RV.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="recharge">
+  <div class="sec-h"><span class="n">05</span><h3>Phase 5: Recharge the Tanks (Kleen Tank)</h3></div>
+  <div class="sec-b">
+    <p class="purpose">With all valves closed, dose each tank and add travel priming water. Road motion spreads the solution over the tank walls and sensors on the drive.</p>
+    <ol class="steps">
+      <li><b class="t">Shake the jug</b>The Calgon settles. Shake before every use.</li>
+      <li><b class="t">Dose each tank, 8 oz</b>
+        <ul>
+          <li>Black: down the toilet</li>
+          <li>Galley gray: down the kitchen sink</li>
+          <li>Bath gray: down the shower drain</li>
+        </ul></li>
+      <li><b class="t">Add travel priming water</b>Use the marked gallon jug.
+        <ul>
+          <li>Black: 3 gallons through the toilet</li>
+          <li>Each gray tank: 1 to 2 gallons through its drain</li>
+        </ul></li>
+      <li><b class="t">Choose the water source</b>
+        <ul>
+          <li>Full hookup: use city water. It is still connected at this point.</li>
+          <li>Dump station: prime the black tank from the container you filled at the site. Run a short amount from the fresh tank, with the pump on, for the gray tanks.</li>
+          <li>Boondocking next: prime the black tank with 5 gallons and skip the gray tanks to protect fresh water.</li>
+        </ul></li>
+      <li><b class="t">Cap and secure the jug</b>Store it upright and wedged for travel, away from food.</li>
+    </ol>
+    <div class="tw"><table>
+      <thead><tr><th>Tank</th><th>Dose</th><th>Where it goes</th><th>Travel priming</th></tr></thead>
+      <tbody>
+        <tr><td>Black</td><td class="num">8 oz</td><td>Toilet</td><td class="num">3 gal</td></tr>
+        <tr><td>Galley gray</td><td class="num">8 oz</td><td>Kitchen sink</td><td class="num">1 to 2 gal</td></tr>
+        <tr><td>Bath gray</td><td class="num">8 oz</td><td>Shower drain</td><td class="num">1 to 2 gal</td></tr>
+      </tbody>
+    </table></div>
+    <div class="co co-note">
+      <span class="lb">NOTE</span>
+      Each dump cycle uses 24 oz, so one gallon jug covers about 5 cycles. Travel priming water weighs about 42 to 58 lb in total.
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="water">
+  <div class="sec-h"><span class="n">06</span><h3>Phase 6: Disconnect City Water</h3></div>
+  <div class="sec-b">
+    <p class="purpose">Full hookup only. City water stays connected until the tanks are recharged.</p>
+    <ol class="steps">
+      <li><b class="t">Confirm the water pump is off</b></li>
+      <li><b class="t">Close the spigot</b></li>
+      <li><b class="t">Bleed the pressure</b>Open the potable ballcock at the Y to relieve line pressure.</li>
+      <li><b class="t">Disconnect the braided jumper at the trailer inlet</b>Turn counterclockwise by hand over a bucket or towel.</li>
+      <li><b class="t">Remove and drain the filter</b></li>
+      <li><b class="t">Disconnect and drain the blue potable hose</b></li>
+      <li><b class="t">Drain the flush and wash hose</b></li>
+      <li><b class="t">Remove the regulator and Y-splitter from the spigot</b></li>
+      <li><b class="t">Stow all hoses and fittings</b>The blue potable hose, the flush and wash hose, and the sewer hose each go in separate places. None of them touch.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="inspect">
+  <div class="sec-h"><span class="n">07</span><h3>Post-Dump Inspection</h3></div>
+  <div class="sec-b">
+    <div class="co co-check">
+      <span class="lb">CHECK BEFORE YOU PULL OUT</span>
+      <ul>
+        <li>Black, gray 1, gray 2, and the main dump valve each pushed fully in and solid</li>
+        <li>Outlet cap hand tight and does not turn</li>
+        <li>No drips around the outlet. Drips with all valves closed point to a worn cap seal.</li>
+        <li>All hoses stowed in separate compartments. None left on the ground or outside the RV.</li>
+        <li>Kleen Tank jug capped and secured</li>
+        <li>Optional: log the dump date, tank levels, and any issues</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="arrive">
+  <div class="sec-h"><span class="n">08</span><h3>On Arrival at the Next Camp</h3></div>
+  <div class="sec-b">
+    <p class="purpose">The tanks already hold their dose from departure. Arrival priming adds the rest of the water they need to work.</p>
+    <ol class="steps">
+      <li><b class="t">Connect shore water</b>Follow the Water section of the Arrival checklist.</li>
+      <li><b class="t">Prime the black tank first</b>Before anyone uses the toilet, add 2 to 3 more gallons.</li>
+      <li><b class="t">Prime the gray tanks</b>Add 2 to 3 gallons to each, or let normal use fill them.</li>
+    </ol>
+    <div class="co co-note">
+      <span class="lb">NOTE</span>
+      If you dumped at a station after leaving camp and did not recharge, add the 8 oz dose to each tank now.
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="midtrip">
+  <div class="sec-h"><span class="n">09</span><h3>Mid-Trip Dumps and Special Cases</h3></div>
+  <div class="sec-b">
+    <ul class="plain">
+      <li><b>When to dump:</b> Dump when a tank is 90 to 100 percent full where practical. A full tank drains with more force and carries solids out. If you must dump early, add water first to raise the level.</li>
+      <li><b>After a mid-trip dump:</b> Close the valves, add 8 oz to each emptied tank, and prime with 3 to 5 gallons, since you are not traveling to slosh it.</li>
+      <li><b>Boondocking or no shore water:</b> Before departing, prime the black tank with 5 gallons from the dump station water source. Skip arrival priming on the gray tanks to protect fresh water.</li>
+      <li><b>Sensor misreads or odor:</b> Increase the dose in the affected tank first. The galley tank is the most likely, because of grease.</li>
+    </ul>
+    <div class="co co-warn">
+      <span class="lb">WARNING</span>
+      Use the Kleen Tank solution only. Do not combine it with enzyme, bacteria, or digesting treatments. Those leave a sticky residue that fouls sensors and does not fully drain.
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="valves">
+  <div class="sec-h"><span class="n">10</span><h3>Valve Management During a Stay</h3></div>
+  <div class="sec-b">
+    <ul class="plain">
+      <li><b>For travel:</b> All three tank valves and the main dump valve are closed. Never tow with any valve open.</li>
+      <li><b>Black valve:</b> Keep it closed for the whole stay. Open it only to dump. A black tank left open drains the liquid and leaves solids behind.</li>
+      <li><b>Gray valves, default:</b> Keep them closed and open them only to dump. A closed tank holds the Kleen Tank solution and builds the volume needed for a strong drain.</li>
+      <li><b>Gray valves, heavy use alternative:</b> During back-to-back showers or heavy cleanup on a sewer hookup, a gray valve may be left open briefly. This needs a p-trap or loop in the sewer hose to block sewer gas, and sewer flies can still get past a trap. Close the valve within 30 minutes of heavy use ending.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="mix">
+  <div class="sec-h"><span class="n">11</span><h3>Appendix: Mixing the Kleen Tank Solution</h3></div>
+  <div class="sec-b">
+    <p>One gallon batch:</p>
+    <div class="tw"><table>
+      <thead><tr><th>Ingredient</th><th>Amount</th><th>How to measure</th></tr></thead>
+      <tbody>
+        <tr><td>Calgon bath powder (water-softening bath soak)</td><td class="num">8 oz</td><td>By weight on a kitchen scale, or one heaping cup</td></tr>
+        <tr><td>Pine-Sol or similar pine oil cleaner</td><td class="num">40 fl oz</td><td>By volume (5 cups)</td></tr>
+        <tr><td>Warm water</td><td class="num">about 10 cups</td><td>Fill to the top of the jug</td></tr>
+      </tbody>
+    </table></div>
+    <ol class="steps" style="margin-top:12px">
+      <li><b class="t">Check the Calgon label</b>It must say to add it to bathwater. A body or dusting powder (talc or cornstarch) does not dissolve and settles as sludge on the sensors. Do not use it.</li>
+      <li><b class="t">Add the powder first</b>Put the 8 oz of Calgon in the empty jug. Powder clumps if it lands on liquid.</li>
+      <li><b class="t">Add the Pine-Sol</b>40 fl oz.</li>
+      <li><b class="t">Add warm water slowly</b>Pause to let the foam settle, then fill to the top.</li>
+      <li><b class="t">Cap and shake gently</b></li>
+      <li><b class="t">Let it sit overnight</b>Shake again in the morning so the powder fully dissolves.</li>
+      <li><b class="t">Label the jug</b>"HOLDING TANK SOLUTION, DO NOT DRINK"</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="safety">
+  <div class="sec-h"><span class="n">12</span><h3>Critical Safety Notes</h3></div>
+  <div class="sec-b">
+    <ul class="plain">
+      <li><b>One valve at a time.</b> Never open more than one tank valve at once. The only exception is the black valve staying open while you flush.</li>
+      <li><b>Black valve timing.</b> Close it only when the tank is empty. If unsure, give it another 30 to 60 seconds. Solids caught in the gate cause odor and seal failure.</li>
+      <li><b>Outlet exposure.</b> Never leave the RV outlet open without a receiving hose in place. Remove the cap only with the main dump valve closed.</li>
+      <li><b>Valve handles.</b> Push and pull straight along the rod, never sideways. The aluminum rods bend, and a bent rod will not seal.</li>
+      <li><b>Stiff valves.</b> Apply silicone lubricant where the rod enters the valve body and cycle the valve several times. Never use WD-40 or mineral oil. Repeat every 2 to 3 years. If a valve stays stiff, have it serviced before the next dump.</li>
+      <li><b>Hose separation.</b> The sewer hose, the flush and wash hose, and the blue potable hose never share storage or touch. Replace the sewer hose every 5 to 7 years, or at once if it shows cracks, splits, or soft spots.</li>
+      <li><b>Tank treatment.</b> Kleen Tank solution only. No enzyme, digester, or caustic additives. Mix it with good ventilation, keep it off skin and out of eyes, and store it away from food.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="sources">
+  <div class="sec-h"><span class="n">13</span><h3>Sources</h3></div>
+  <div class="sec-b">
+    <ul class="src">
+      <li><a href="https://cdn.sanity.io/files/6o1m6b3k/production/d0f726a816426407aef5e6a925de74d361be0325.pdf">Alliance RV Owner's Guide</a>, Plumbing and Utilities, pages 178 to 217, with the dump sequence correction applied. The Owner's Guide remains the final reference for the trailer.</li>
+      <li><a href="https://kleentank.com/tank-solution-recipe/">Kleen Tank: Tank Solution Recipe</a></li>
+      <li><a href="https://kleentank.com/throw-away-your-rv-tank-additive-use-this-instead/">Kleen Tank: Throw away your RV tank additive; use this instead</a></li>
+      <li><a href="./">262RB Rollout</a>: Arrival Setup and Camp Departure checklists</li>
+    </ul>
+  </div>
+</section>
+
+<footer>Alliance Delta 262RB &middot; 262RB Rollout companion guide</footer>
+</main>
+</body>
+</html>
