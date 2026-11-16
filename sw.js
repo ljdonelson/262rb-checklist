@@ -1,6 +1,6 @@
 /* 262RB Rollout - offline worker.
    Bump VERSION whenever index.html changes, or phones keep the old copy. */
-const VERSION = "v6";
+const VERSION = "v7";
 const CACHE   = "rb262-" + VERSION;
 const SHELL   = ["./", "./index.html", "./checklist.txt", "./manifest.webmanifest",
                  "./icon-192.png", "./icon-512.png", "./icon-512-maskable.png",
